@@ -1,239 +1,424 @@
 ---
-title: API Reference
+title: QtumJS API Reference
 
-language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
+language_tabs:
+  - typescript
   - javascript
-
-toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+> To install qtumjs
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
-
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+```
+npm install qtumjs
 ```
 
-```python
-import kittn
+QtumJS is a JavaScript library for developing DApp on the Qtum blockchain. You can use this library to develop frontend UI that runs in the browser, as well as backend server scripts that run in NodeJS.
 
-api = kittn.authorize('meowmeowmeow')
+The main classes are:
+
+Class | Description
+--------- | -----------
+QtumRPCRaw | Direct access to `qtumd`'s blockchain RPC service, using JSONRPC 1.0 calling convention.
+QtumRPC | Wrapper for `QtumRPCRaw`, to provide interface like JSONRPC 2.0.
+Contract | An abstraction for interacting with smart contracts. Handles [ABI encoding/decoding](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI).
+
+QtumJS is developed using [TypeScript](https://www.typescriptlang.org/), and as such, comes with robust type definitions for all the APIs. We recommend using [VSCode](https://code.visualstudio.com/) to take advantage of language support, such as type hinting and autocompletion.
+
+But you can also choose to use plain JavaScript and notepad if you prefer.
+
+This document is the reference for QtumJS API, and its basic uses. For a tutorial-style introduction to QtumJS, see: [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
+
+
+## Running Qtum RPC
+
+> To run qtumd in development mode.
+
+```
+docker run -it --rm \
+  --name myapp \
+  -v `pwd`:/dapp \
+  -p 3889:3889 \
+  hayeah/qtumportal
 ```
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+> To run qtumd for the test network (testnet):
+
+```
+docker run -it --rm \
+  --name myapp \
+  -e "QTUM_NETWORK=testnet" \
+  -v `pwd`:/dapp \
+  -p 3889:3889 \
+  hayeah/qtumportal
 ```
 
-```javascript
-const kittn = require('kittn');
 
-let api = kittn.authorize('meowmeowmeow');
-```
+QtumJS relies on `qtumd` to provide the JSON-RPC service for accessing the QTUM blockchain.
 
-> Make sure to replace `meowmeowmeow` with your API key.
+For more details, see: [QtumBook - Running QTUM](https://github.com/qtumproject/qtumbook/blob/master/SUMMARY.md#part-1---running-qtum).
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+The default JSON-RPC credential is "qtum:test", running on port 3889
 </aside>
 
-# Kittens
+# ERC20 Example
 
-## Get All Kittens
+```js
+import {
+  QtumRPC,
+  Contract,
+} from "qtumjs"
 
-```ruby
-require 'kittn'
+const repo = require("./solar.json")
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+// Connect to docker qtumd JSON-RPC service
+const rpc = new QtumRPC("http://qtum:test@localhost:3889")
+
+const myToken = new Contract(rpc, repo.contracts[
+  "zeppelin-solidity/contracts/token/CappedToken.sol"
+])
+
+async function transfer(fromAddr, toAddr, amount) {
+  const tx = await myToken.send("transfer", [toAddr, amount], {
+    senderAddress: fromAddr,
+  })
+
+  console.log("transfer tx:", tx.txid)
+  console.log(tx)
+
+  await tx.confirm(3)
+  console.log("transfer confirmed")
+}
 ```
 
-```python
-import kittn
+Assuming that `solar.json` contains information about your deployed contracts,
+you can use qtumjs to call the token contract's method to transfer tokens.
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+The complete example: [qtumproject/qtumbook-mytoken-qtumjs-cli](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli)
+
+For contract deployment, see [Solar Smart Contract Deployment Tool](https://github.com/qtumproject/solar).
+
+For fleshed out tutorial, see [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
+
+# Contract
+
+A class abstraction for interacting with a Smart Contract.
+
+This is a more convenient API than using `QtumRPC` to directly call the RPC's `sendcontract` and `calltocontract` methods. It handles ABI encoding, to convert between JS and Solidity values.
+
+* API for confirming transactions.
+* API for invoking contract's methods using `call` or `send` .
+* API for getting contract's log events.
+
+## constructor
+
+```js
+const rpc = new QtumRPC("http://qtum:test@localhost:3889")
+
+const myToken = new Contract(rpc, repo.contracts[
+  "zeppelin-solidity/contracts/token/CappedToken.sol"
+])
 ```
 
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+> The contract [info](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3) is generated by [solar](https://github.com/qtumproject/solar).
+
+Arg | Type | Description
+--------- | ----------- | -----------
+rpc | QtumRPC | The RPC instance used to interact with the contract.
+info | IContractInfo | Information for the deployed contract
+
+## call
+
+```js
+async function totalSupply() {
+  const result = await myToken.call("totalSupply")
+
+  // supply is a BigNumber instance (see: bn.js)
+  const supply = result.outputs[0]
+
+  console.log("supply", supply.toNumber())
+}
 ```
 
-```javascript
-const kittn = require('kittn');
+> Example output:
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+```js
+{ address: 'a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3',
+  executionResult:
+   { gasUsed: 21689,
+     excepted: 'None',
+     newAddress: 'a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3',
+     output: '00000000000000000000000000000000000000000000000000000000000036b0',
+     codeDeposit: 0,
+     gasRefunded: 0,
+     depositSize: 0,
+     gasForDeposit: 0 },
+  transactionReceipt:
+   { stateRoot: '5a0d9cd5df18165c75755f4345ca81da94f9247c1c031171fd6e2ce1a368844c',
+     gasUsed: 21689,
+     bloom: '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000',
+     log: [] },
+  outputs: [ <BN: 36b0> ] }
 ```
 
-> The above command returns JSON structured like this:
+Executes contract method on your own local qtumd node as a "simulation", returning results, but not changing the blockchain.
 
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+This is free.
+
+Arg | Type
+--------- | -----------
+method | string
+  | Name of the contract method.
+args | Array\<any>
+  | Arguments for calling the method
+opts | IContractCallRequestOptions
+  | call options
+@return | Promise\<IContractCallResult>
+  | call result, with ABI decoded outputs
+
+Reference: [IContractCallResult](#icontractcallresult)
+
+## send
+
+```js
+async function mint(toAddr, amount) {
+  // Submit a `sendtocontract` transaction, invoking the `mint` method.
+  const tx = await myToken.send("mint", [toAddr, amount])
+
+  console.log("tx:", tx)
+
+  // Wait for 3 confirmations. The callback receives the
+  // updated transaction info for each additional confirmation.
+  await tx.confirm(3, (updatedTx) => {
+    console.log("new confirmation", updatedTx.txid, updatedTx.confirmations)
+  })
+}
+```
+
+> Example output:
+
+```
+mint tx: 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9
+{ amount: 0,
+  fee: -0.081064,
+  confirmations: 0,
+  trusted: true,
+  txid: '858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9',
+  walletconflicts: [],
+  time: 1515475961,
+  timereceived: 1515475961,
+  'bip125-replaceable': 'no',
+  details:
+   [ { account: '',
+       category: 'send',
+       amount: 0,
+       vout: 0,
+       fee: -0.081064,
+       abandoned: false } ],
+  hex: '0200000001006a977de70014fdc2546ed19a531326086c6c9631cb1c5352db5f09e147736b0100000049483045022100b4ca32770a9f42679c6d20b7ddb5feb160303fceafc2db0fedba18a22f0b643602203c2568eb689fd324e76a12f367552fe4cce36b29f8174738209f881959aadbab01feffffff02000000000000000063010403400d0301284440c10f19000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94000000
+00000000000000000000000000000000000000000000000000000003e814a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3c2601e72902e0000001976a914dcd32b87270aeb980333213da2549c9907e09e9488ac212e0000',
+  method: 'mint',
+  confirm: [Function: confirm] }
+```
+
+> The callback would print 3 times, for each confirmation:
+
+```
+new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 1
+new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 2
+new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 3
+```
+
+Creates a transaction that executes contract method globally on the network, changing the blockchain.
+
+This costs gas.
+
+There are two asynchronous steps to a transaction:
+
+1. You submit the the transaction to the network.
+2. Once submitted, wait for a required number of confirmations.
+
+Arg | Type
+--------- | -----------
+method | string
+  | Name of the contract method.
+args | Array\<any>
+  | Arguments for calling the method
+opts | IContractSendRequestOptions
+  | *optional* send options
+@return | Promise\<IContractSendResult>
+  | call result, with ABI decoded outputs
+
+### References
+
+* [IContractSendRequestOptions](#icontractsendrequestoptions)
+* [IContractSendResult](#icontractsendresult)
+
+
+
+# Types Lexicon
+
+## IContractCallResult
+
+```ts
+export interface IContractCallDecodedResult extends IRPCCallContractResult {
+  outputs: any[]
+}
+
+export interface IRPCCallContractResult {
+  address: string
+  executionResult: IExecutionResult,
+  transactionReceipt: {
+    stateRoot: string,
+    gasUsed: string,
+    bloom: string,
+    log: any[],
   }
-]
-```
+}
 
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+export interface IExecutionResult {
+  gasUsed: number,
+  excepted: string,
+  newAddress: string,
+  output: string,
+  codeDeposit: number,
+  gasRefunded: number,
+  depositSize: number,
+  gasForDeposit: number,
 }
 ```
 
-This endpoint retrieves a specific kitten.
+The return type of `Contract#call`.
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+## IContractSendRequestOptions
 
-### HTTP Request
+Options for [Contract#send](#send)
 
-`GET http://example.com/kittens/<ID>`
+```ts
+/**
+ * Options for `send` to a contract method.
+ */
+export interface IContractSendRequestOptions {
+  /**
+   * The amount in QTUM to send. eg 0.1, default: 0
+   */
+  amount?: number | string
 
-### URL Parameters
+  /**
+   * gasLimit, default: 200000, max: 40000000
+   */
+  gasLimit?: number
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+  /**
+   * Qtum price per gas unit, default: 0.00000001, min:0.00000001
+   */
+  gasPrice?: number | string
 
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
+  /**
+   * The quantum address that will be used as sender.
+   */
+  senderAddress?: string
 }
 ```
 
-This endpoint deletes a specific kitten.
+## IContractSendResult
 
-### HTTP Request
+```ts
+const tx = await contract.send(method, args)
+await tx.confirm(3, (updatedTx, receipt) => {
+  /// ...
+})
+```
 
-`DELETE http://example.com/kittens/<ID>`
+Return value of [Contract#send](#send).
 
-### URL Parameters
+The `confirm` method is used to wait for transaction confirmations.
 
-Parameter | Description
+The arguments for `confirm`:
+
+Arg | Type
 --------- | -----------
-ID | The ID of the kitten to delete
+n | number
+  | *optional* Number of confirmations to wait for.
+callback | IContractSendConfirmationHandler
+  | *optional* The callback function invoked for each additional confirmation
+
+
+The callback values are:
+
+Arg | Type
+--------- | -----------
+updatedTx | IRPCGetTransactionResult
+  | Basic information about a transaction submitted to the network.
+receipt | IContractSendReceipt
+  | Additional information about a confirmed transaction.
+
+### References
+
++ [IRPCGetTransactionResult](#irpcgettransactionresult)
++ [IContractSendReceipt](#icontractsendreceipt)
+
+## IRPCGetTransactionResult
+
+```ts
+export interface IRPCGetTransactionResult {
+  amount: number,
+  fee: number,
+  confirmations: number,
+  blockhash: string,
+  blockindex: number,
+  blocktime: number,
+  txid: string,
+  // FIXME: Need better typing
+  walletconflicts: any[],
+  time: number,
+  timereceived: number,
+  "bip125-replaceable": "no" | "yes" | "unknown",
+  // FIXME: Need better typing
+  details: any[]
+  hex: string,
+}
+```
+
+Basic information about a transaction submitted to the network.
+
+## IContractSendReceipt
+
+The transaction receipt for [Contract#send](#send), with the event logs decoded.
+
+```ts
+export interface IContractSendReceipt extends IRPCGetTransactionReceiptBase {
+  /**
+   * logs decoded using ABI
+   */
+  logs: IDecodedLog[],
+
+  /**
+   * undecoded logs
+   */
+  rawlogs: ITransactionLog[],
+}
+
+/**
+ * A decoded Solidity event log
+ */
+export interface IDecodedLog {
+  /**
+   * The event log's name
+   */
+  type: string
+
+  /**
+   * Arguments to event log as key-value map
+   */
+  [key: string]: any
+}
+```
+
 
