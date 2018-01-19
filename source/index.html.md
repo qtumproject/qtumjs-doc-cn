@@ -340,13 +340,50 @@ opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
 
 ## onLogs
 
-Subscribe to contract's new events. The callback is invoked as new events are generated.
+```js
+myToken.onLog((entry) => {
+    console.log(entry)
+}, { minconf: 1 })
+```
 
-## logsEmitter
+Subscribe to contract's new events. The callback is invoked each time a new event is received. By default, `onLog` start listening for logs from the tip of the blockchain. Use `fromBlock` to also receive older events.
 
-Subscribe to contract's new events, returns an [EventsEmitter](https://github.com/primus/eventemitter3).
 
-The emitted events have the same name as the Solidity events.
+Arg | Type
+--------- | -----------
+callback | (entry: [IContractEventLog](#icontracteventlog)) => void
+opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
+  | Event logs query parameters
+
+## logEmitter
+
+```js
+this.emitter = myToken.logEmitter({ minconf: 1 })
+
+this.emitter.on("Mint", (event) => {
+  // ...
+})
+
+this.emitter.on("Transfer", (event) => {
+  // ...
+})
+
+this.emitter.on("?", (event) => {
+  // all un-decodeable events
+})
+```
+
+Subscribe to contract's new events, using the [EventsEmitter](https://github.com/primus/eventemitter3) interface.
+
+The Solidity events names are used as the emitted event names.
+
+Events that lack ABI definitions (thus cannot be parsed) are emitted as "?".
+
+Arg | Type
+--------- | -----------
+opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
+  | Event logs query parameters
+
 
 # Types Lexicon
 
