@@ -15,3 +15,11 @@ bundle exec middleman server
 == View your site at "http://localhost:4567", "http://127.0.0.1:4567"
 == Inspect your site configuration at "http://localhost:4567/__middleman", "http://127.0.0.1:4567/__middleman"
 ```
+
+# Deploy
+
+```
+./deploy.sh
+```
+
+http://qtumproject.github.io/qtumjs-doc
