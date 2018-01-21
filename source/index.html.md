@@ -384,6 +384,59 @@ Arg | Type
 opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
   | Event logs query parameters
 
+## receipt
+
+```ts
+const txid = "62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97"
+const receipt = await qrcToken.receipt(txid)
+console.log(JSON.stringify(receipt, null, 2))
+```
+
+> Example output
+
+```
+{
+  "blockHash": "af37cb8d9905521542243005fadc9f18c1498c9823e35fa277ea1c37174c289a",
+  "blockNumber": 83981,
+  "transactionHash": "62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97",
+  "transactionIndex": 28,
+  "from": "57142e3bcf000f28890b5d979afc7ea90204e1de",
+  "to": "49665919e437a4bedb92faa45ed33ebb5a33ee63",
+  "cumulativeGasUsed": 37029,
+  "gasUsed": 37029,
+  "contractAddress": "49665919e437a4bedb92faa45ed33ebb5a33ee63",
+  "logs": [
+    {
+      "type": "Transfer",
+      "from": "0x57142e3bcf000f28890b5d979afc7ea90204e1de",
+      "to": "0xc0ed80283c53c300c31c2bda6eca841e53cb6a21",
+      "value": "1ba5add5700"
+    }
+  ],
+  "rawlogs": [
+    {
+      "address": "49665919e437a4bedb92faa45ed33ebb5a33ee63",
+      "topics": [
+        "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+        "00000000000000000000000057142e3bcf000f28890b5d979afc7ea90204e1de",
+        "000000000000000000000000c0ed80283c53c300c31c2bda6eca841e53cb6a21"
+      ],
+      "data": "000000000000000000000000000000000000000000000000000001ba5add5700"
+    }
+  ]
+}
+```
+
+Get the receipt for a transaction that had been accepted by the network. If the transaction had not been confirmed, null is returned.
+
+The event logs for that transaction are ABI-encoded.
+
+Arg | Type
+--------- | -----------
+txid | string
+  | Transaction ID
+@return | Promise\<[IContractSendReceipt](#icontractsendreceipt)>
+  | Transaction receipt, with event logs.
 
 # Types Lexicon
 
