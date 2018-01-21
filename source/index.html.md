@@ -618,6 +618,10 @@ export interface IDecodedLog {
 }
 ```
 
+### References
+
+* [IRPCGetTransactionReceiptBase](#irpcgettransactionreceiptbase)
+
 ## IRPCWaitForLogsRequest
 
 ```ts
@@ -753,3 +757,24 @@ export interface IDecodedSolidityEvent {
 
 A decoded Solidity event log. The event parameters are stored a key-value map.
 
+## IRPCGetTransactionReceiptBase
+
+Receipt for a transaction accepted by the network. It is returned by the `gettransactionreceipt` RPC call.
+
+```ts
+export interface IRPCGetTransactionReceiptBase {
+  blockHash: string
+  blockNumber: number
+
+  transactionHash: string
+  transactionIndex: number
+
+  from: string
+  to: string
+
+  cumulativeGasUsed: number
+  gasUsed: number
+
+  contractAddress: string
+}
+```
