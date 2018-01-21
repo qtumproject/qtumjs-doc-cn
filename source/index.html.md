@@ -373,7 +373,7 @@ this.emitter.on("?", (event) => {
 })
 ```
 
-Subscribe to contract's new events, using the [EventsEmitter](https://github.com/primus/eventemitter3) interface.
+Subscribe to contract's new events, using the [EventsEmitter](https://github.com/primus/eventemitter3) interface. The events emitted are instances of [IContractEventLog](#icontracteventlog)
 
 The Solidity events names are used as the emitted event names.
 
@@ -1004,6 +1004,32 @@ export interface IRPCGetTransactionReceiptBase {
   gasUsed: number
 
   contractAddress: string
+}
+```
+
+> Example
+
+```js
+{
+  "blockHash": "369c6ded05c27ae7efc97964cce083b0ea9b8b950e67c51e52cb1bf898b9c415",
+  "blockNumber": 12184,
+  "transactionHash": "d1638a53f38fd68c5763e2eef9d86b9fc6ee7ea3f018dae7b1e385b4a9a78bc7",
+  "transactionIndex": 2,
+  "from": "dcd32b87270aeb980333213da2549c9907e09e94",
+  "to": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "cumulativeGasUsed": 39306,
+  "gasUsed": 39306,
+  "contractAddress": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "topics": [
+    "0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
+    "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+  ],
+  "data": "00000000000000000000000000000000000000000000000000000000000003e8",
+  "event": {
+    "type": "Mint",
+    "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+    "amount": "3e8"
+  }
 }
 ```
 
