@@ -438,6 +438,250 @@ txid | string
 @return | Promise\<[IContractSendReceipt](#icontractsendreceipt)>
   | Transaction receipt, with event logs.
 
+# QtumRPC
+
+```
+const rpc = new QtumRPC('http://qtum:test@localhost:3889');
+```
+
+This is a JSON-RPC client for direct access to the `qtumd` RPC API. It does not handle any ABI-encoding or decoding for you.
+
+You may included the RPC user & password in the URL if required. In the sample, the user is `qtum` and the password is `test`.
+
+Note: The `QtumRPC` class has a few undocumented public methods used internally by the `Contract` abstraction. Consider anything undocumented unsupported that could change in the future. Right now `rawCall` is the only public API.
+
+Arg | Type
+--------- | -----------
+url | string
+    | URL of qtumd RPC
+
+## rawCall
+
+> Call the `getinfo` RPC method to get basic information about the Qtum blockchain:
+
+```ts
+const info = await rpc.rawCall("getinfo")
+console.log(info)
+```
+
+> Output of `getinfo`:
+
+```js
+{ version: 141300,
+  protocolversion: 70016,
+  walletversion: 130000,
+  balance: 0,
+  stake: 0,
+  blocks: 85685,
+  timeoffset: 0,
+  connections: 8,
+  proxy: '',
+  difficulty:
+   { 'proof-of-work': 0.0000152587890625,
+     'proof-of-stake': 5207642.8878753 },
+  testnet: false,
+  moneysupply: 100322740,
+  keypoololdest: 1513325658,
+  keypoolsize: 100,
+  paytxfee: 0,
+  relayfee: 0.004,
+  errors: '' }
+```
+
+Makes a JSON-RPC 1.0 method call, and return the result. This method throws an error if the JSON API returns a non-200 HTTP result.
+
+> Using `try...catch` to handle error:
+
+```ts
+async function main() {
+  try {
+    const result = await rpc.rawCall("unknown-method-hohoho")
+  } catch (err) {
+    console.log("err", err)
+  }
+}
+```
+
+## All RPC Methods
+
+All RPC methods supported by qtumd.
+
+```
+== Blockchain ==
+callcontract "address" "data" ( address )
+getaccountinfo "address"
+getbestblockhash
+getblock "blockhash" ( verbose )
+getblockchaininfo
+getblockcount
+getblockhash height
+getblockheader "hash" ( verbose )
+getchaintips
+getdifficulty
+getmempoolancestors txid (verbose)
+getmempooldescendants txid (verbose)
+getmempoolentry txid
+getmempoolinfo
+getrawmempool ( verbose )
+getstorage "address"
+gettransactionreceipt "hash"
+gettxout "txid" n ( include_mempool )
+gettxoutproof ["txid",...] ( blockhash )
+gettxoutsetinfo
+listcontracts (start maxDisplay)
+preciousblock "blockhash"
+pruneblockchain
+searchlogs <fromBlock> <toBlock> (address) (topics)
+verifychain ( checklevel nblocks )
+verifytxoutproof "proof"
+waitforlogs (fromBlock) (toBlock) (filter) (minconf)
+
+== Control ==
+getinfo
+getmemoryinfo
+help ( "command" )
+stop
+
+== Generating ==
+generate nblocks ( maxtries )
+generatetoaddress nblocks address (maxtries)
+
+== Mining ==
+getblocktemplate ( TemplateRequest )
+getmininginfo
+getnetworkhashps ( nblocks height )
+getstakinginfo
+getsubsidy [nTarget]
+prioritisetransaction <txid> <priority delta> <fee delta>
+submitblock "hexdata" ( "jsonparametersobject" )
+
+== Network ==
+addnode "node" "add|remove|onetry"
+clearbanned
+disconnectnode "node"
+getaddednodeinfo ( "node" )
+getconnectioncount
+getnettotals
+getnetworkinfo
+getpeerinfo
+listbanned
+ping
+setban "subnet" "add|remove" (bantime) (absolute)
+setnetworkactive true|false
+
+== Rawtransactions ==
+createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,"data":"hex",...} ( locktime )
+decoderawtransaction "hexstring"
+decodescript "hexstring"
+fromhexaddress "hexaddress"
+fundrawtransaction "hexstring" ( options )
+gethexaddress "address"
+getrawtransaction "txid" ( verbose )
+sendrawtransaction "hexstring" ( allowhighfees )
+signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
+
+== Util ==
+createmultisig nrequired ["key",...]
+estimatefee nblocks
+estimatepriority nblocks
+estimatesmartfee nblocks
+estimatesmartpriority nblocks
+signmessagewithprivkey "privkey" "message"
+validateaddress "address"
+verifymessage "address" "signature" "message"
+
+== Wallet ==
+abandontransaction "txid"
+addmultisigaddress nrequired ["key",...] ( "account" )
+addwitnessaddress "address"
+backupwallet "destination"
+bumpfee "txid" ( options )
+createcontract "bytecode" (gaslimit gasprice "senderaddress" broadcast)
+dumpprivkey "address"
+dumpwallet "filename"
+encryptwallet "passphrase"
+getaccount "address"
+getaccountaddress "account"
+getaddressesbyaccount "account"
+getbalance ( "account" minconf include_watchonly )
+getnewaddress ( "account" )
+getrawchangeaddress
+getreceivedbyaccount "account" ( minconf )
+getreceivedbyaddress "address" ( minconf )
+gettransaction "txid" ( include_watchonly ) (waitconf)
+getunconfirmedbalance
+getwalletinfo
+importaddress "address" ( "label" rescan p2sh )
+importmulti "requests" "options"
+importprivkey "qtum" ( "label" ) ( rescan )
+importprunedfunds
+importpubkey "pubkey" ( "label" rescan )
+importwallet "filename"
+keypoolrefill ( newsize )
+listaccounts ( minconf include_watchonly)
+listaddressgroupings
+listlockunspent
+listreceivedbyaccount ( minconf include_empty include_watchonly)
+listreceivedbyaddress ( minconf include_empty include_watchonly)
+listsinceblock ( "blockhash" target_confirmations include_watchonly)
+listtransactions ( "account" count skip include_watchonly)
+listunspent ( minconf maxconf  ["addresses",...] [include_unsafe] )
+lockunspent unlock ([{"txid":"txid","vout":n},...])
+move "fromaccount" "toaccount" amount ( minconf "comment" )
+removeprunedfunds "txid"
+reservebalance [<reserve> [amount]]
+sendfrom "fromaccount" "toaddress" amount ( minconf "comment" "comment_to" )
+sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
+sendmanywithdupes "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
+sendtoaddress "address" amount ( "comment" "comment_to" subtractfeefromamount )
+sendtocontract "contractaddress" "data" (amount gaslimit gasprice senderaddress broadcast)
+setaccount "address" "account"
+settxfee amount
+signmessage "address" "message"
+```
+
+## Example: getblockcount
+
+Returns the number of blocks in the longest blockchain.
+
+```ts
+const result = await rpc.rawCall("getblockcount")
+```
+
+> Result
+
+```
+85687
+```
+
+## Example: getnewaddress
+
+Returns a new Qtum address for receiving payments. This might be useful for exchanges that need to generate deposit addresses for users.
+
+```ts
+const result = await rpc.rawCall("getnewaddress")
+```
+
+> Result
+
+```
+QSnrDTj4UNcRwKdhY8sUZEd74VzwqeAddW
+```
+
+## Example: fromhexaddress
+
+Converts a base58 pubkeyhash address to a hex address for use in smart contracts.
+
+```ts
+const result = await rpc.rawCall("gethexaddress", ["QSnrDTj4UNcRwKdhY8sUZEd74VzwqeAddW"])
+```
+
+> Result
+
+```
+43debdac95a0eaa4ff92d6b873944a4d92beae59
+```
+
 # Types Lexicon
 
 ## IContractInfo
