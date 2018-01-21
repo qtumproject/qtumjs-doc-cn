@@ -394,7 +394,7 @@ console.log(JSON.stringify(receipt, null, 2))
 
 > Example output
 
-```
+```js
 {
   "blockHash": "af37cb8d9905521542243005fadc9f18c1498c9823e35fa277ea1c37174c289a",
   "blockNumber": 83981,
@@ -440,7 +440,7 @@ txid | string
 
 # QtumRPC
 
-```
+```ts
 const rpc = new QtumRPC('http://qtum:test@localhost:3889');
 ```
 
