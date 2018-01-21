@@ -257,6 +257,29 @@
               </ul>
           </li>
           <li>
+            <a href="#qtumrpc" class="toc-h1 toc-link" data-title="QtumRPC">QtumRPC</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#rawcall" class="toc-h2 toc-link" data-title="rawCall">rawCall</a>
+                  </li>
+                  <li>
+                    <a href="#all-rpc-methods" class="toc-h2 toc-link" data-title="All RPC Methods">All RPC Methods</a>
+                  </li>
+                  <li>
+                    <a href="#example-getblockcount" class="toc-h2 toc-link" data-title="Example: getblockcount">Example: getblockcount</a>
+                  </li>
+                  <li>
+                    <a href="#example-getnewaddress" class="toc-h2 toc-link" data-title="Example: getnewaddress">Example: getnewaddress</a>
+                  </li>
+                  <li>
+                    <a href="#example-fromhexaddress" class="toc-h2 toc-link" data-title="Example: fromhexaddress">Example: fromhexaddress</a>
+                  </li>
+                  <li>
+                    <a href="#example-gettransactionreceipt" class="toc-h2 toc-link" data-title="Example: gettransactionreceipt">Example: gettransactionreceipt</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#types-lexicon" class="toc-h1 toc-link" data-title="Types Lexicon">Types Lexicon</a>
               <ul class="toc-list-h2">
                   <li>
@@ -288,6 +311,9 @@
                   </li>
                   <li>
                     <a href="#idecodedsolidityevent" class="toc-h2 toc-link" data-title="IDecodedSolidityEvent">IDecodedSolidityEvent</a>
+                  </li>
+                  <li>
+                    <a href="#irpcgettransactionreceiptbase" class="toc-h2 toc-link" data-title="IRPCGetTransactionReceiptBase">IRPCGetTransactionReceiptBase</a>
                   </li>
               </ul>
           </li>
@@ -760,36 +786,36 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 <blockquote>
 <p>Example output</p>
 </blockquote>
-<pre class="highlight plaintext"><code>{
-  "blockHash": "af37cb8d9905521542243005fadc9f18c1498c9823e35fa277ea1c37174c289a",
-  "blockNumber": 83981,
-  "transactionHash": "62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97",
-  "transactionIndex": 28,
-  "from": "57142e3bcf000f28890b5d979afc7ea90204e1de",
-  "to": "49665919e437a4bedb92faa45ed33ebb5a33ee63",
-  "cumulativeGasUsed": 37029,
-  "gasUsed": 37029,
-  "contractAddress": "49665919e437a4bedb92faa45ed33ebb5a33ee63",
-  "logs": [
-    {
-      "type": "Transfer",
-      "from": "0x57142e3bcf000f28890b5d979afc7ea90204e1de",
-      "to": "0xc0ed80283c53c300c31c2bda6eca841e53cb6a21",
-      "value": "1ba5add5700"
-    }
-  ],
-  "rawlogs": [
-    {
-      "address": "49665919e437a4bedb92faa45ed33ebb5a33ee63",
-      "topics": [
-        "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-        "00000000000000000000000057142e3bcf000f28890b5d979afc7ea90204e1de",
-        "000000000000000000000000c0ed80283c53c300c31c2bda6eca841e53cb6a21"
-      ],
-      "data": "000000000000000000000000000000000000000000000000000001ba5add5700"
-    }
-  ]
-}
+<pre class="highlight javascript"><code><span class="p">{</span>
+  <span class="s2">"blockHash"</span><span class="p">:</span> <span class="s2">"af37cb8d9905521542243005fadc9f18c1498c9823e35fa277ea1c37174c289a"</span><span class="p">,</span>
+  <span class="s2">"blockNumber"</span><span class="p">:</span> <span class="mi">83981</span><span class="p">,</span>
+  <span class="s2">"transactionHash"</span><span class="p">:</span> <span class="s2">"62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97"</span><span class="p">,</span>
+  <span class="s2">"transactionIndex"</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span>
+  <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"57142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
+  <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"49665919e437a4bedb92faa45ed33ebb5a33ee63"</span><span class="p">,</span>
+  <span class="s2">"cumulativeGasUsed"</span><span class="p">:</span> <span class="mi">37029</span><span class="p">,</span>
+  <span class="s2">"gasUsed"</span><span class="p">:</span> <span class="mi">37029</span><span class="p">,</span>
+  <span class="s2">"contractAddress"</span><span class="p">:</span> <span class="s2">"49665919e437a4bedb92faa45ed33ebb5a33ee63"</span><span class="p">,</span>
+  <span class="s2">"logs"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Transfer"</span><span class="p">,</span>
+      <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0x57142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
+      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xc0ed80283c53c300c31c2bda6eca841e53cb6a21"</span><span class="p">,</span>
+      <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"1ba5add5700"</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="s2">"rawlogs"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">"address"</span><span class="p">:</span> <span class="s2">"49665919e437a4bedb92faa45ed33ebb5a33ee63"</span><span class="p">,</span>
+      <span class="s2">"topics"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">"ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"</span><span class="p">,</span>
+        <span class="s2">"00000000000000000000000057142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
+        <span class="s2">"000000000000000000000000c0ed80283c53c300c31c2bda6eca841e53cb6a21"</span>
+      <span class="p">],</span>
+      <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"000000000000000000000000000000000000000000000000000001ba5add5700"</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
 </code></pre>
 <p>Get the receipt for a transaction that had been accepted by the network. If the transaction had not been confirmed, null is returned.</p>
 
@@ -818,7 +844,261 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 <td>Transaction receipt, with event logs.</td>
 </tr>
 </tbody></table>
-<h1 id='types-lexicon'>Types Lexicon</h1><h2 id='icontractinfo'>IContractInfo</h2><pre class="highlight typescript"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">IContractInfo</span> <span class="p">{</span>
+<h1 id='qtumrpc'>QtumRPC</h1><pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">rpc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">QtumRPC</span><span class="p">(</span><span class="s1">'http://qtum:test@localhost:3889'</span><span class="p">);</span>
+</code></pre>
+<p>This is a JSON-RPC client for direct access to the <code>qtumd</code> RPC API. It does not handle any ABI-encoding or decoding for you.</p>
+
+<p>You may included the RPC user &amp; password in the URL if required. In the sample, the user is <code>qtum</code> and the password is <code>test</code>.</p>
+
+<p>Note: The <code>QtumRPC</code> class has a few undocumented public methods used internally by the <code>Contract</code> abstraction. Consider anything undocumented unsupported that could change in the future. Right now <code>rawCall</code> is the only public API.</p>
+
+<table><thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>url</td>
+<td>string</td>
+</tr>
+<tr>
+<td></td>
+<td>URL of qtumd RPC</td>
+</tr>
+</tbody></table>
+<h2 id='rawcall'>rawCall</h2>
+<blockquote>
+<p>Call the <code>getinfo</code> RPC method to get basic information about the Qtum blockchain:</p>
+</blockquote>
+<pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">info</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rawCall</span><span class="p">(</span><span class="s2">"getinfo"</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>Output of <code>getinfo</code>:</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="p">{</span> <span class="nl">version</span><span class="p">:</span> <span class="mi">141300</span><span class="p">,</span>
+  <span class="nx">protocolversion</span><span class="p">:</span> <span class="mi">70016</span><span class="p">,</span>
+  <span class="nx">walletversion</span><span class="p">:</span> <span class="mi">130000</span><span class="p">,</span>
+  <span class="nx">balance</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">stake</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">blocks</span><span class="p">:</span> <span class="mi">85685</span><span class="p">,</span>
+  <span class="nx">timeoffset</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">connections</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+  <span class="nx">proxy</span><span class="p">:</span> <span class="s1">''</span><span class="p">,</span>
+  <span class="nx">difficulty</span><span class="p">:</span>
+   <span class="p">{</span> <span class="s1">'proof-of-work'</span><span class="p">:</span> <span class="mf">0.0000152587890625</span><span class="p">,</span>
+     <span class="s1">'proof-of-stake'</span><span class="p">:</span> <span class="mf">5207642.8878753</span> <span class="p">},</span>
+  <span class="nx">testnet</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">moneysupply</span><span class="p">:</span> <span class="mi">100322740</span><span class="p">,</span>
+  <span class="nx">keypoololdest</span><span class="p">:</span> <span class="mi">1513325658</span><span class="p">,</span>
+  <span class="nx">keypoolsize</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="nx">paytxfee</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">relayfee</span><span class="p">:</span> <span class="mf">0.004</span><span class="p">,</span>
+  <span class="nx">errors</span><span class="p">:</span> <span class="s1">''</span> <span class="p">}</span>
+</code></pre>
+<p>Makes a JSON-RPC 1.0 method call, and return the result. This method throws an error if the JSON API returns a non-200 HTTP result.</p>
+
+<blockquote>
+<p>Using <code>try...catch</code> to handle error:</p>
+</blockquote>
+<pre class="highlight typescript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rawCall</span><span class="p">(</span><span class="s2">"unknown-method-hohoho"</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"err"</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre><h2 id='all-rpc-methods'>All RPC Methods</h2>
+<p>All RPC methods supported by qtumd.</p>
+<pre class="highlight plaintext"><code>== Blockchain ==
+callcontract "address" "data" ( address )
+getaccountinfo "address"
+getbestblockhash
+getblock "blockhash" ( verbose )
+getblockchaininfo
+getblockcount
+getblockhash height
+getblockheader "hash" ( verbose )
+getchaintips
+getdifficulty
+getmempoolancestors txid (verbose)
+getmempooldescendants txid (verbose)
+getmempoolentry txid
+getmempoolinfo
+getrawmempool ( verbose )
+getstorage "address"
+gettransactionreceipt "hash"
+gettxout "txid" n ( include_mempool )
+gettxoutproof ["txid",...] ( blockhash )
+gettxoutsetinfo
+listcontracts (start maxDisplay)
+preciousblock "blockhash"
+pruneblockchain
+searchlogs &lt;fromBlock&gt; &lt;toBlock&gt; (address) (topics)
+verifychain ( checklevel nblocks )
+verifytxoutproof "proof"
+waitforlogs (fromBlock) (toBlock) (filter) (minconf)
+
+== Control ==
+getinfo
+getmemoryinfo
+help ( "command" )
+stop
+
+== Generating ==
+generate nblocks ( maxtries )
+generatetoaddress nblocks address (maxtries)
+
+== Mining ==
+getblocktemplate ( TemplateRequest )
+getmininginfo
+getnetworkhashps ( nblocks height )
+getstakinginfo
+getsubsidy [nTarget]
+prioritisetransaction &lt;txid&gt; &lt;priority delta&gt; &lt;fee delta&gt;
+submitblock "hexdata" ( "jsonparametersobject" )
+
+== Network ==
+addnode "node" "add|remove|onetry"
+clearbanned
+disconnectnode "node"
+getaddednodeinfo ( "node" )
+getconnectioncount
+getnettotals
+getnetworkinfo
+getpeerinfo
+listbanned
+ping
+setban "subnet" "add|remove" (bantime) (absolute)
+setnetworkactive true|false
+
+== Rawtransactions ==
+createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,"data":"hex",...} ( locktime )
+decoderawtransaction "hexstring"
+decodescript "hexstring"
+fromhexaddress "hexaddress"
+fundrawtransaction "hexstring" ( options )
+gethexaddress "address"
+getrawtransaction "txid" ( verbose )
+sendrawtransaction "hexstring" ( allowhighfees )
+signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
+
+== Util ==
+createmultisig nrequired ["key",...]
+estimatefee nblocks
+estimatepriority nblocks
+estimatesmartfee nblocks
+estimatesmartpriority nblocks
+signmessagewithprivkey "privkey" "message"
+validateaddress "address"
+verifymessage "address" "signature" "message"
+
+== Wallet ==
+abandontransaction "txid"
+addmultisigaddress nrequired ["key",...] ( "account" )
+addwitnessaddress "address"
+backupwallet "destination"
+bumpfee "txid" ( options )
+createcontract "bytecode" (gaslimit gasprice "senderaddress" broadcast)
+dumpprivkey "address"
+dumpwallet "filename"
+encryptwallet "passphrase"
+getaccount "address"
+getaccountaddress "account"
+getaddressesbyaccount "account"
+getbalance ( "account" minconf include_watchonly )
+getnewaddress ( "account" )
+getrawchangeaddress
+getreceivedbyaccount "account" ( minconf )
+getreceivedbyaddress "address" ( minconf )
+gettransaction "txid" ( include_watchonly ) (waitconf)
+getunconfirmedbalance
+getwalletinfo
+importaddress "address" ( "label" rescan p2sh )
+importmulti "requests" "options"
+importprivkey "qtum" ( "label" ) ( rescan )
+importprunedfunds
+importpubkey "pubkey" ( "label" rescan )
+importwallet "filename"
+keypoolrefill ( newsize )
+listaccounts ( minconf include_watchonly)
+listaddressgroupings
+listlockunspent
+listreceivedbyaccount ( minconf include_empty include_watchonly)
+listreceivedbyaddress ( minconf include_empty include_watchonly)
+listsinceblock ( "blockhash" target_confirmations include_watchonly)
+listtransactions ( "account" count skip include_watchonly)
+listunspent ( minconf maxconf  ["addresses",...] [include_unsafe] )
+lockunspent unlock ([{"txid":"txid","vout":n},...])
+move "fromaccount" "toaccount" amount ( minconf "comment" )
+removeprunedfunds "txid"
+reservebalance [&lt;reserve&gt; [amount]]
+sendfrom "fromaccount" "toaddress" amount ( minconf "comment" "comment_to" )
+sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
+sendmanywithdupes "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
+sendtoaddress "address" amount ( "comment" "comment_to" subtractfeefromamount )
+sendtocontract "contractaddress" "data" (amount gaslimit gasprice senderaddress broadcast)
+setaccount "address" "account"
+settxfee amount
+signmessage "address" "message"
+</code></pre><h2 id='example-getblockcount'>Example: getblockcount</h2>
+<p>Returns the number of blocks in the longest blockchain.</p>
+<pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rawCall</span><span class="p">(</span><span class="s2">"getblockcount"</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>Result</p>
+</blockquote>
+<pre class="highlight plaintext"><code>85687
+</code></pre><h2 id='example-getnewaddress'>Example: getnewaddress</h2>
+<p>Returns a new Qtum address for receiving payments. This might be useful for exchanges that need to generate deposit addresses for users.</p>
+<pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rawCall</span><span class="p">(</span><span class="s2">"getnewaddress"</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>Result</p>
+</blockquote>
+<pre class="highlight plaintext"><code>QSnrDTj4UNcRwKdhY8sUZEd74VzwqeAddW
+</code></pre><h2 id='example-fromhexaddress'>Example: fromhexaddress</h2>
+<p>Converts a base58 pubkeyhash address to a hex address for use in smart contracts.</p>
+<pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rawCall</span><span class="p">(</span><span class="s2">"gethexaddress"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"QSnrDTj4UNcRwKdhY8sUZEd74VzwqeAddW"</span><span class="p">])</span>
+</code></pre>
+<blockquote>
+<p>Result</p>
+</blockquote>
+<pre class="highlight plaintext"><code>43debdac95a0eaa4ff92d6b873944a4d92beae59
+</code></pre><h2 id='example-gettransactionreceipt'>Example: gettransactionreceipt</h2>
+<p>Get the receipt of a confirmed transaction.</p>
+<pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">txid</span> <span class="o">=</span> <span class="s2">"62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97"</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">rawCall</span><span class="p">(</span><span class="s2">"gettransactionreceipt"</span><span class="p">,</span> <span class="p">[</span><span class="nx">txid</span><span class="p">])</span>
+</code></pre>
+<blockquote>
+<p>Result</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">"blockHash"</span><span class="p">:</span> <span class="s2">"af37cb8d9905521542243005fadc9f18c1498c9823e35fa277ea1c37174c289a"</span><span class="p">,</span>
+    <span class="s2">"blockNumber"</span><span class="p">:</span> <span class="mi">83981</span><span class="p">,</span>
+    <span class="s2">"transactionHash"</span><span class="p">:</span> <span class="s2">"62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97"</span><span class="p">,</span>
+    <span class="s2">"transactionIndex"</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span>
+    <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"57142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
+    <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"49665919e437a4bedb92faa45ed33ebb5a33ee63"</span><span class="p">,</span>
+    <span class="s2">"cumulativeGasUsed"</span><span class="p">:</span> <span class="mi">37029</span><span class="p">,</span>
+    <span class="s2">"gasUsed"</span><span class="p">:</span> <span class="mi">37029</span><span class="p">,</span>
+    <span class="s2">"contractAddress"</span><span class="p">:</span> <span class="s2">"49665919e437a4bedb92faa45ed33ebb5a33ee63"</span><span class="p">,</span>
+    <span class="s2">"log"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">"address"</span><span class="p">:</span> <span class="s2">"49665919e437a4bedb92faa45ed33ebb5a33ee63"</span><span class="p">,</span>
+        <span class="s2">"topics"</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">"ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"</span><span class="p">,</span>
+          <span class="s2">"00000000000000000000000057142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
+          <span class="s2">"000000000000000000000000c0ed80283c53c300c31c2bda6eca841e53cb6a21"</span>
+        <span class="p">],</span>
+        <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"000000000000000000000000000000000000000000000000000001ba5add5700"</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</code></pre><h1 id='types-lexicon'>Types Lexicon</h1><h2 id='icontractinfo'>IContractInfo</h2><pre class="highlight typescript"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">IContractInfo</span> <span class="p">{</span>
   <span class="cm">/**
    * Contract's ABI definitions, produced by solc.
    */</span>
@@ -999,7 +1279,11 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
    */</span>
   <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="kr">any</span>
 <span class="p">}</span>
-</code></pre><h2 id='irpcwaitforlogsrequest'>IRPCWaitForLogsRequest</h2><pre class="highlight typescript"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">IRPCWaitForLogsRequest</span> <span class="p">{</span>
+</code></pre><h3 id='references-2'>References</h3>
+<ul>
+<li><a href="#irpcgettransactionreceiptbase">IRPCGetTransactionReceiptBase</a></li>
+</ul>
+<h2 id='irpcwaitforlogsrequest'>IRPCWaitForLogsRequest</h2><pre class="highlight typescript"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">IRPCWaitForLogsRequest</span> <span class="p">{</span>
   <span class="cm">/**
    * The block number to start looking for logs.
    */</span>
@@ -1115,7 +1399,24 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 <span class="p">}</span>
 </code></pre>
 <p>A decoded Solidity event log. The event parameters are stored a key-value map.</p>
+<h2 id='irpcgettransactionreceiptbase'>IRPCGetTransactionReceiptBase</h2>
+<p>Receipt for a transaction accepted by the network. It is returned by the <code>gettransactionreceipt</code> RPC call.</p>
+<pre class="highlight typescript"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">IRPCGetTransactionReceiptBase</span> <span class="p">{</span>
+  <span class="nl">blockHash</span><span class="p">:</span> <span class="kr">string</span>
+  <span class="nl">blockNumber</span><span class="p">:</span> <span class="kr">number</span>
 
+  <span class="nl">transactionHash</span><span class="p">:</span> <span class="kr">string</span>
+  <span class="nl">transactionIndex</span><span class="p">:</span> <span class="kr">number</span>
+
+  <span class="nl">from</span><span class="p">:</span> <span class="kr">string</span>
+  <span class="nl">to</span><span class="p">:</span> <span class="kr">string</span>
+
+  <span class="nl">cumulativeGasUsed</span><span class="p">:</span> <span class="kr">number</span>
+  <span class="nl">gasUsed</span><span class="p">:</span> <span class="kr">number</span>
+
+  <span class="nl">contractAddress</span><span class="p">:</span> <span class="kr">string</span>
+<span class="p">}</span>
+</code></pre>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
