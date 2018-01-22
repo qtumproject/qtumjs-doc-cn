@@ -243,6 +243,9 @@
                     <a href="#send" class="toc-h2 toc-link" data-title="send">send</a>
                   </li>
                   <li>
+                    <a href="#method-overloading" class="toc-h2 toc-link" data-title="Method Overloading">Method Overloading</a>
+                  </li>
+                  <li>
                     <a href="#logs" class="toc-h2 toc-link" data-title="logs">logs</a>
                   </li>
                   <li>
@@ -626,7 +629,29 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 <td>call result, with ABI decoded outputs</td>
 </tr>
 </tbody></table>
-<h2 id='logs'>logs</h2><pre class="highlight javascript"><code><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getLogs</span><span class="p">(</span><span class="nx">fromBlock</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">toBlock</span><span class="o">=</span><span class="s2">"latest"</span><span class="p">)</span> <span class="p">{</span>
+<h2 id='method-overloading'>Method Overloading</h2>
+<p>If there is no ambiguity, use the method name to call/send a method. If the same method name has multiple definitions, use the method signature to call/send a method.</p>
+
+<blockquote>
+<p>The name foo may have multiple method definitions:</p>
+</blockquote>
+<pre class="highlight typescript"><code><span class="kd">function</span> <span class="nx">foo</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">int256</span> <span class="nx">_a</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">uint256</span> <span class="nx">_a</span><span class="p">,</span> <span class="nx">uint256</span> <span class="nx">_b</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">int256</span> <span class="nx">_a</span><span class="p">,</span> <span class="nx">int256</span> <span class="nx">_b</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p><code>foo</code> methods with arity 0 and arity 1 have no ambiguity. Can call directly.</p>
+</blockquote>
+<pre class="highlight typescript"><code><span class="nx">contract</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">)</span>
+<span class="nx">contract</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</code></pre>
+<blockquote>
+<p><code>foo</code> methods with arity 2 are ambiguous, must call with full method signature:</p>
+</blockquote>
+<pre class="highlight typescript"><code><span class="nx">contract</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s2">"foo(uint256,uint256)"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="nx">contract</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s2">"foo(int256,int256)"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</code></pre><h2 id='logs'>logs</h2><pre class="highlight javascript"><code><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getLogs</span><span class="p">(</span><span class="nx">fromBlock</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">toBlock</span><span class="o">=</span><span class="s2">"latest"</span><span class="p">)</span> <span class="p">{</span>
   <span class="kr">const</span> <span class="nx">logs</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myToken</span><span class="p">.</span><span class="nx">logs</span><span class="p">({</span>
     <span class="nx">fromBlock</span><span class="p">,</span>
     <span class="nx">toBlock</span><span class="p">,</span>
@@ -758,7 +783,7 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
   <span class="c1">// all un-decodeable events</span>
 <span class="p">})</span>
 </code></pre>
-<p>Subscribe to contract&#39;s new events, using the <a href="https://github.com/primus/eventemitter3">EventsEmitter</a> interface.</p>
+<p>Subscribe to contract&#39;s new events, using the <a href="https://github.com/primus/eventemitter3">EventsEmitter</a> interface. The events emitted are instances of <a href="#icontracteventlog">IContractEventLog</a></p>
 
 <p>The Solidity events names are used as the emitted event names.</p>
 
@@ -1372,6 +1397,31 @@ signmessage "address" "message"
   <span class="nl">gasUsed</span><span class="p">:</span> <span class="kr">number</span>
 
   <span class="nl">contractAddress</span><span class="p">:</span> <span class="kr">string</span>
+<span class="p">}</span>
+</code></pre>
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight javascript"><code><span class="p">{</span>
+  <span class="s2">"blockHash"</span><span class="p">:</span> <span class="s2">"369c6ded05c27ae7efc97964cce083b0ea9b8b950e67c51e52cb1bf898b9c415"</span><span class="p">,</span>
+  <span class="s2">"blockNumber"</span><span class="p">:</span> <span class="mi">12184</span><span class="p">,</span>
+  <span class="s2">"transactionHash"</span><span class="p">:</span> <span class="s2">"d1638a53f38fd68c5763e2eef9d86b9fc6ee7ea3f018dae7b1e385b4a9a78bc7"</span><span class="p">,</span>
+  <span class="s2">"transactionIndex"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+  <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span>
+  <span class="s2">"cumulativeGasUsed"</span><span class="p">:</span> <span class="mi">39306</span><span class="p">,</span>
+  <span class="s2">"gasUsed"</span><span class="p">:</span> <span class="mi">39306</span><span class="p">,</span>
+  <span class="s2">"contractAddress"</span><span class="p">:</span> <span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span>
+  <span class="s2">"topics"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885"</span><span class="p">,</span>
+    <span class="s2">"000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"</span>
+  <span class="p">],</span>
+  <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"00000000000000000000000000000000000000000000000000000000000003e8"</span><span class="p">,</span>
+  <span class="s2">"event"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Mint"</span><span class="p">,</span>
+    <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+    <span class="s2">"amount"</span><span class="p">:</span> <span class="s2">"3e8"</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </code></pre><h2 id='idecodedsolidityevent'>IDecodedSolidityEvent</h2><pre class="highlight typescript"><code><span class="cm">/**
  * A decoded Solidity event log
