@@ -255,6 +255,33 @@ opts | [IContractSendRequestOptions](#icontractsendrequestoptions)
 @return | Promise\<[IContractSendResult](#icontractsendresult)>
   | call result, with ABI decoded outputs
 
+## Method Overloading
+
+If there is no ambiguity, use the method name to call/send a method. If the same method name has multiple definitions, use the method signature to call/send a method.
+
+> The name foo may have multiple method definitions:
+
+```ts
+function foo();
+function foo(int256 _a);
+function foo(uint256 _a, uint256 _b);
+function foo(int256 _a, int256 _b);
+```
+
+> `foo` methods with arity 0 and arity 1 have no ambiguity. Can call directly.
+
+```ts
+contract.call("foo")
+contract.call("foo", [1])
+```
+
+> `foo` methods with arity 2 are ambiguous, must call with full method signature:
+
+```ts
+contract.call("foo(uint256,uint256)", [1, 2])
+contract.call("foo(int256,int256)", [1, 2])
+```
+
 ## logs
 
 ```js
