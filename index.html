@@ -602,6 +602,8 @@ you can use qtumjs to call the token contract&#39;s method to transfer tokens.</
 
   <span class="c1">// Wait for 3 confirmations. The callback receives the</span>
   <span class="c1">// updated transaction info for each additional confirmation.</span>
+  <span class="c1">//</span>
+  <span class="c1">// Both arguments are optional. `await tx.confirm()` would do.</span>
   <span class="kd">const</span> <span class="nx">receipt</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="nx">updatedTx</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"new confirmation"</span><span class="p">,</span> <span class="nx">updatedTx</span><span class="p">.</span><span class="nx">txid</span><span class="p">,</span> <span class="nx">updatedTx</span><span class="p">.</span><span class="nx">confirmations</span><span class="p">)</span>
   <span class="p">})</span>
