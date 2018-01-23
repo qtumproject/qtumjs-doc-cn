@@ -248,7 +248,7 @@ opts | IContractCallRequestOptions
 
 ## send
 
-```js
+```ts
 async function mint(toAddr, amount) {
   // Submit a `sendtocontract` transaction, invoking the `mint` method.
   const tx = await myToken.send("mint", [toAddr, amount])
@@ -257,9 +257,10 @@ async function mint(toAddr, amount) {
 
   // Wait for 3 confirmations. The callback receives the
   // updated transaction info for each additional confirmation.
-  await tx.confirm(3, (updatedTx) => {
+  const receipt = await tx.confirm(3, (updatedTx) => {
     console.log("new confirmation", updatedTx.txid, updatedTx.confirmations)
   })
+  console.log("tx receipt:", JSON.stringify(receipt, null, 2))
 }
 ```
 
@@ -297,6 +298,55 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 3
 ```
 
+> The returned transaction receipt after confirmation:
+
+```json
+
+{
+  "blockHash": "3b53ad132c26f9c30e5be9f664573428dad8b52e167becea4428d6903cb32740",
+  "blockNumber": 13917,
+  "transactionHash": "79338589bb75e1865be889142890a4e25d3b9dbd454ce3f3c2614587c85e2ed3",
+  "transactionIndex": 1,
+  "from": "dcd32b87270aeb980333213da2549c9907e09e94",
+  "to": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "cumulativeGasUsed": 39306,
+  "gasUsed": 39306,
+  "contractAddress": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "logs": [
+    {
+      "type": "Mint",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "amount": "7d0"
+    },
+    {
+      "type": "Transfer",
+      "from": "0x0000000000000000000000000000000000000000",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "value": "7d0"
+    }
+  ],
+  "rawlogs": [
+    {
+      "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+      "topics": [
+        "0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
+        "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+      ],
+      "data": "00000000000000000000000000000000000000000000000000000000000007d0"
+    },
+    {
+      "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+      "topics": [
+        "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+      ],
+      "data": "00000000000000000000000000000000000000000000000000000000000007d0"
+    }
+  ]
+}
+```
+
 Creates a transaction that executes contract method globally on the network, changing the blockchain.
 
 This costs gas.
@@ -305,6 +355,8 @@ There are two asynchronous steps to a transaction:
 
 1. You submit the the transaction to the network.
 2. Once submitted, wait for a required number of confirmations.
+
+After successful confirmation, the transaction receipt ([IContractSendReceipt](#icontractsendreceipt)) with ABI decoded event logs is returned.
 
 Arg | Type
 --------- | -----------
@@ -1054,6 +1106,54 @@ export interface IDecodedLog {
    * Arguments to event log as key-value map
    */
   [key: string]: any
+}
+```
+
+> Example
+
+```json
+{
+  "blockHash": "3b53ad132c26f9c30e5be9f664573428dad8b52e167becea4428d6903cb32740",
+  "blockNumber": 13917,
+  "transactionHash": "79338589bb75e1865be889142890a4e25d3b9dbd454ce3f3c2614587c85e2ed3",
+  "transactionIndex": 1,
+  "from": "dcd32b87270aeb980333213da2549c9907e09e94",
+  "to": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "cumulativeGasUsed": 39306,
+  "gasUsed": 39306,
+  "contractAddress": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "logs": [
+    {
+      "type": "Mint",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "amount": "7d0"
+    },
+    {
+      "type": "Transfer",
+      "from": "0x0000000000000000000000000000000000000000",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "value": "7d0"
+    }
+  ],
+  "rawlogs": [
+    {
+      "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+      "topics": [
+        "0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
+        "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+      ],
+      "data": "00000000000000000000000000000000000000000000000000000000000007d0"
+    },
+    {
+      "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+      "topics": [
+        "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+      ],
+      "data": "00000000000000000000000000000000000000000000000000000000000007d0"
+    }
+  ]
 }
 ```
 
