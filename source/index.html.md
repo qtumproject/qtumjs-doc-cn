@@ -257,6 +257,8 @@ async function mint(toAddr, amount) {
 
   // Wait for 3 confirmations. The callback receives the
   // updated transaction info for each additional confirmation.
+  //
+  // Both arguments are optional. `await tx.confirm()` would do.
   const receipt = await tx.confirm(3, (updatedTx) => {
     console.log("new confirmation", updatedTx.txid, updatedTx.confirmations)
   })
