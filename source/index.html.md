@@ -167,6 +167,70 @@ async function totalSupply() {
   outputs: [ <BN: 36b0> ] }
 ```
 
+> A simulated "mint" call:
+
+```ts
+const result = await myToken.call("mint", ["dcd32b87270aeb980333213da2549c9907e09e94", 1000])
+```
+
+> Result:
+
+```json
+{
+  "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "executionResult": {
+    "gasUsed": 39306,
+    "excepted": "None",
+    "newAddress": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+    "output": "0000000000000000000000000000000000000000000000000000000000000001",
+    "codeDeposit": 0,
+    "gasRefunded": 0,
+    "depositSize": 0,
+    "gasForDeposit": 0
+  },
+  "transactionReceipt": {
+    "stateRoot": "9922edb770bd700a212427d3bc0764a9fed953a987952b2619b8a78dac7498aa",
+    "gasUsed": 39306,
+    "bloom": "00000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000020000000000008000000000000000000000000000000000000000000000000020000000020000000000800000000000000400000000010000000000000000000000000000000000000000000000000000000000000000000000000000080000000080000000000000000000000000000000000000000000000000000000002010000000000000000000000000000000200000000000000000020000000000000000000000000000000000000000000000000020000000000000000",
+    "log": [
+      {
+        "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+        "topics": [
+          "0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
+          "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+        ],
+        "data": "00000000000000000000000000000000000000000000000000000000000003e8"
+      },
+      {
+        "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+        "topics": [
+          "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+        ],
+        "data": "00000000000000000000000000000000000000000000000000000000000003e8"
+      }
+    ]
+  },
+  "outputs": [
+    true
+  ],
+  "logs": [
+    {
+      "type": "Mint",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "amount": "3e8"
+    },
+    {
+      "type": "Transfer",
+      "from": "0x0000000000000000000000000000000000000000",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "value": "3e8"
+    }
+  ]
+}
+```
+
 Executes contract method on your own local qtumd node as a "simulation", returning results, but not changing the blockchain.
 
 This is free.
@@ -179,10 +243,8 @@ args | Array\<any>
   | Arguments for calling the method
 opts | IContractCallRequestOptions
   | call options
-@return | Promise\<IContractCallResult>
+@return | Promise\<[IContractCallResult](#icontractcallresult)>
   | call result, with ABI decoded outputs
-
-Reference: [IContractCallResult](#icontractcallresult)
 
 ## send
 
@@ -774,9 +836,19 @@ The minimal deployment information necessary to interact with a deployed contrac
 
 ## IContractCallResult
 
+The result of calling a contract method, with decoded outputs and logs.
+
 ```ts
-export interface IContractCallDecodedResult extends IRPCCallContractResult {
+export interface IContractCallResult extends IRPCCallContractResult {
+  /**
+   * ABI-decoded outputs
+   */
   outputs: any[]
+
+  /**
+   * ABI-decoded logs
+   */
+  logs: Array<IDecodedSolidityEvent | null>
 }
 
 export interface IRPCCallContractResult {
@@ -799,6 +871,64 @@ export interface IExecutionResult {
   gasRefunded: number,
   depositSize: number,
   gasForDeposit: number,
+}
+```
+
+> Example:
+
+```js
+{
+  "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+  "executionResult": {
+    "gasUsed": 39306,
+    "excepted": "None",
+    "newAddress": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+    "output": "0000000000000000000000000000000000000000000000000000000000000001",
+    "codeDeposit": 0,
+    "gasRefunded": 0,
+    "depositSize": 0,
+    "gasForDeposit": 0
+  },
+  "transactionReceipt": {
+    "stateRoot": "9922edb770bd700a212427d3bc0764a9fed953a987952b2619b8a78dac7498aa",
+    "gasUsed": 39306,
+    "bloom": "00000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000020000000000008000000000000000000000000000000000000000000000000020000000020000000000800000000000000400000000010000000000000000000000000000000000000000000000000000000000000000000000000000080000000080000000000000000000000000000000000000000000000000000000002010000000000000000000000000000000200000000000000000020000000000000000000000000000000000000000000000000020000000000000000",
+    "log": [
+      {
+        "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+        "topics": [
+          "0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885",
+          "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+        ],
+        "data": "00000000000000000000000000000000000000000000000000000000000003e8"
+      },
+      {
+        "address": "a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3",
+        "topics": [
+          "ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"
+        ],
+        "data": "00000000000000000000000000000000000000000000000000000000000003e8"
+      }
+    ]
+  },
+  "outputs": [
+    true
+  ],
+  "logs": [
+    {
+      "type": "Mint",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "amount": "3e8"
+    },
+    {
+      "type": "Transfer",
+      "from": "0x0000000000000000000000000000000000000000",
+      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "value": "3e8"
+    }
+  ]
 }
 ```
 
