@@ -594,17 +594,18 @@ you can use qtumjs to call the token contract&#39;s method to transfer tokens.</
 <td>call result, with ABI decoded outputs</td>
 </tr>
 </tbody></table>
-<h2 id='send'>send</h2><pre class="highlight javascript"><code><span class="nx">async</span> <span class="kd">function</span> <span class="nx">mint</span><span class="p">(</span><span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+<h2 id='send'>send</h2><pre class="highlight typescript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">mint</span><span class="p">(</span><span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Submit a `sendtocontract` transaction, invoking the `mint` method.</span>
-  <span class="kr">const</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myToken</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"mint"</span><span class="p">,</span> <span class="p">[</span><span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">])</span>
+  <span class="kd">const</span> <span class="nx">tx</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">myToken</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"mint"</span><span class="p">,</span> <span class="p">[</span><span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">])</span>
 
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"tx:"</span><span class="p">,</span> <span class="nx">tx</span><span class="p">)</span>
 
   <span class="c1">// Wait for 3 confirmations. The callback receives the</span>
   <span class="c1">// updated transaction info for each additional confirmation.</span>
-  <span class="nx">await</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="nx">updatedTx</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">receipt</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="nx">updatedTx</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"new confirmation"</span><span class="p">,</span> <span class="nx">updatedTx</span><span class="p">.</span><span class="nx">txid</span><span class="p">,</span> <span class="nx">updatedTx</span><span class="p">.</span><span class="nx">confirmations</span><span class="p">)</span>
   <span class="p">})</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"tx receipt:"</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">receipt</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre>
 <blockquote>
@@ -639,6 +640,54 @@ you can use qtumjs to call the token contract&#39;s method to transfer tokens.</
 new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 2
 new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 3
 </code></pre>
+<blockquote>
+<p>The returned transaction receipt after confirmation:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="s2">"blockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3b53ad132c26f9c30e5be9f664573428dad8b52e167becea4428d6903cb32740"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"blockNumber"</span><span class="p">:</span><span class="w"> </span><span class="mi">13917</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"79338589bb75e1865be889142890a4e25d3b9dbd454ce3f3c2614587c85e2ed3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transactionIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cumulativeGasUsed"</span><span class="p">:</span><span class="w"> </span><span class="mi">39306</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"gasUsed"</span><span class="p">:</span><span class="w"> </span><span class="mi">39306</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"contractAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"logs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mint"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Transfer"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"rawlogs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"topics"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000000000000000000000000000000000000000000000000000000007d0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"topics"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"0000000000000000000000000000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000000000000000000000000000000000000000000000000000000007d0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <p>Creates a transaction that executes contract method globally on the network, changing the blockchain.</p>
 
 <p>This costs gas.</p>
@@ -649,6 +698,8 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 <li>You submit the the transaction to the network.</li>
 <li>Once submitted, wait for a required number of confirmations.</li>
 </ol>
+
+<p>After successful confirmation, the transaction receipt (<a href="#icontractsendreceipt">IContractSendReceipt</a>) with ABI decoded event logs is returned.</p>
 
 <table><thead>
 <tr>
@@ -1431,7 +1482,54 @@ signmessage "address" "message"
    */</span>
   <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="kr">any</span>
 <span class="p">}</span>
-</code></pre><h3 id='references-2'>References</h3>
+</code></pre>
+<blockquote>
+<p>Example</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"blockHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3b53ad132c26f9c30e5be9f664573428dad8b52e167becea4428d6903cb32740"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"blockNumber"</span><span class="p">:</span><span class="w"> </span><span class="mi">13917</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transactionHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"79338589bb75e1865be889142890a4e25d3b9dbd454ce3f3c2614587c85e2ed3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"transactionIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"cumulativeGasUsed"</span><span class="p">:</span><span class="w"> </span><span class="mi">39306</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"gasUsed"</span><span class="p">:</span><span class="w"> </span><span class="mi">39306</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"contractAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"logs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mint"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Transfer"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"rawlogs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"topics"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"0f6798a560793a54c3bcfe86a93cde1e73087d944c0ea20544137d4121396885"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000000000000000000000000000000000000000000000000000000007d0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"topics"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"0000000000000000000000000000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"000000000000000000000000dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000000000000000000000000000000000000000000000000000000007d0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='references-2'>References</h3>
 <ul>
 <li><a href="#irpcgettransactionreceiptbase">IRPCGetTransactionReceiptBase</a></li>
 </ul>
