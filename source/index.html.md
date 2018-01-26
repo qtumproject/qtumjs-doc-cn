@@ -112,13 +112,13 @@ const qtum = new Qtum("http://qtum:test@localhost:3889", repoData)
 The `Qtum` class is an instance of the `qtumjs` API. It provides two main features:
 
 + Access to the `qtumd` RPC service. It is a subclass of [QtumRPC](#qtumrpc).
-+ A factory method to instantiate `Contract` instances, for interacting with deployed contracts.
++ A factory method to instantiate [Contract](#contract-2) instances, for interacting with deployed contracts.
 
 Arg | Type
 --------- | -----------
 url | string
   | URL of the qtumd RPC service
-repoData | IContractsRepoData
+repoData | [IContractsRepoData](#icontractsrepodata)
   | Information about Solidity contracts.
 
 The `repoData` contains the ABI definitions of all the deployed contracts and libraries, as well as deploy addresses. This information is used to instantiate `Contract` instances.
@@ -1386,3 +1386,69 @@ export interface IRPCGetTransactionReceiptBase {
   contractAddress: string
 }
 ```
+
+## IContractsRepoData
+
+Information about contracts
+
+```ts
+export interface IContractsRepoData {
+  /**
+   * Information about deployed contracts
+   */
+  contracts: {
+    [key: string]: IContractInfo,
+  },
+
+  /**
+   * Information about deployed libraries
+   */
+  libraries: {
+    [key: string]: IContractInfo,
+  }
+
+  /**
+   * Information of contracts referenced by deployed contract/libraries, but not deployed
+   */
+  related: {
+    [key: string]: {
+      abi: IABIMethod[],
+    },
+  }
+}
+
+/**
+ * The minimal deployment information necessary to interact with a
+ * deployed contract.
+ */
+export interface IContractInfo {
+  /**
+   * Contract's ABI definitions, produced by solc.
+   */
+  abi: IABIMethod[]
+
+  /**
+   * Contract's address
+   */
+  address: string
+
+  /**
+   * The owner address of the contract
+   */
+  sender?: string
+}
+
+export interface IABIMethod {
+  name: string,
+  type: string,
+  payable: boolean,
+  inputs: IABIInput[],
+  outputs: IABIOutput[],
+  constant: boolean,
+  anonymous: boolean,
+}
+```
+
+This can be generated automatically using the [solar](https://github.com/qtumproject/solar) deployment tool.
+
+An example [solar.json](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example).
