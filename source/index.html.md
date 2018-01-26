@@ -259,13 +259,13 @@ const result = await myToken.call("mint", ["dcd32b87270aeb980333213da2549c9907e0
   "logs": [
     {
       "type": "Mint",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "amount": "3e8"
     },
     {
       "type": "Transfer",
-      "from": "0x0000000000000000000000000000000000000000",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "from": "0000000000000000000000000000000000000000",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "value": "3e8"
     }
   ]
@@ -358,13 +358,13 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
   "logs": [
     {
       "type": "Mint",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "amount": "7d0"
     },
     {
       "type": "Transfer",
-      "from": "0x0000000000000000000000000000000000000000",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "from": "0000000000000000000000000000000000000000",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "value": "7d0"
     }
   ],
@@ -475,7 +475,7 @@ async function getLogs(fromBlock=0, toBlock="latest") {
       "data": "00000000000000000000000000000000000000000000000000000000000003e8",
       "event": {
         "type": "Mint",
-        "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+        "to": "dcd32b87270aeb980333213da2549c9907e09e94",
         "amount": "3e8"
       }
     },
@@ -497,8 +497,8 @@ async function getLogs(fromBlock=0, toBlock="latest") {
       "data": "00000000000000000000000000000000000000000000000000000000000003e8",
       "event": {
         "type": "Transfer",
-        "from": "0x0000000000000000000000000000000000000000",
-        "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+        "from": "0000000000000000000000000000000000000000",
+        "to": "dcd32b87270aeb980333213da2549c9907e09e94",
         "value": "3e8"
       }
     }
@@ -592,8 +592,8 @@ console.log(JSON.stringify(receipt, null, 2))
   "logs": [
     {
       "type": "Transfer",
-      "from": "0x57142e3bcf000f28890b5d979afc7ea90204e1de",
-      "to": "0xc0ed80283c53c300c31c2bda6eca841e53cb6a21",
+      "from": "57142e3bcf000f28890b5d979afc7ea90204e1de",
+      "to": "c0ed80283c53c300c31c2bda6eca841e53cb6a21",
       "value": "1ba5add5700"
     }
   ],
@@ -637,7 +637,7 @@ Note: The `QtumRPC` class has a few undocumented public methods used internally 
 Arg | Type
 --------- | -----------
 url | string
-    | URL of qtumd RPC
+    | URL of the qtumd RPC service
 
 ## rawCall
 
@@ -1014,13 +1014,13 @@ export interface IExecutionResult {
   "logs": [
     {
       "type": "Mint",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "amount": "3e8"
     },
     {
       "type": "Transfer",
-      "from": "0x0000000000000000000000000000000000000000",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "from": "0000000000000000000000000000000000000000",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "value": "3e8"
     }
   ]
@@ -1168,13 +1168,13 @@ export interface IDecodedLog {
   "logs": [
     {
       "type": "Mint",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "amount": "7d0"
     },
     {
       "type": "Transfer",
-      "from": "0x0000000000000000000000000000000000000000",
-      "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+      "from": "0000000000000000000000000000000000000000",
+      "to": "dcd32b87270aeb980333213da2549c9907e09e94",
       "value": "7d0"
     }
   ],
@@ -1327,7 +1327,7 @@ export interface IRPCGetTransactionReceiptBase {
   "data": "00000000000000000000000000000000000000000000000000000000000003e8",
   "event": {
     "type": "Mint",
-    "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+    "to": "dcd32b87270aeb980333213da2549c9907e09e94",
     "amount": "3e8"
   }
 }
@@ -1357,8 +1357,8 @@ export interface IDecodedSolidityEvent {
 ```js
 {
   "type": "Transfer",
-  "from": "0x0000000000000000000000000000000000000000",
-  "to": "0xdcd32b87270aeb980333213da2549c9907e09e94",
+  "from": "0000000000000000000000000000000000000000",
+  "to": "dcd32b87270aeb980333213da2549c9907e09e94",
   "value": "3e8"
 }
 ```
