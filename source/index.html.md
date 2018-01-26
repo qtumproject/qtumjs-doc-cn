@@ -68,20 +68,15 @@ The default JSON-RPC credential is "qtum:test", running on port 3889
 
 # ERC20 Example
 
-```js
+```ts
 import {
   QtumRPC,
-  Contract,
 } from "qtumjs"
 
-const repo = require("./solar.json")
+const repoData = require("./solar.json")
+const qtum = new Qtum("http://qtum:test@localhost:3889", repoData)
 
-// Connect to docker qtumd JSON-RPC service
-const rpc = new QtumRPC("http://qtum:test@localhost:3889")
-
-const myToken = new Contract(rpc, repo.contracts[
-  "zeppelin-solidity/contracts/token/CappedToken.sol"
-])
+const myToken = qtum.contract("zeppelin-solidity/contracts/token/CappedToken.sol")
 
 async function transfer(fromAddr, toAddr, amount) {
   const tx = await myToken.send("transfer", [toAddr, amount], {
@@ -99,11 +94,57 @@ async function transfer(fromAddr, toAddr, amount) {
 Assuming that `solar.json` contains information about your deployed contracts,
 you can use qtumjs to call the token contract's method to transfer tokens.
 
+An example [solar.json](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example). This can be generated automatically using the [solar](https://github.com/qtumproject/solar) deployment tool.
+
 The complete example: [qtumproject/qtumbook-mytoken-qtumjs-cli](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli)
 
 For contract deployment, see [Solar Smart Contract Deployment Tool](https://github.com/qtumproject/solar).
 
 For fleshed out tutorial, see [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
+
+# Qtum
+
+```ts
+const repoData = require("./solar.json")
+const qtum = new Qtum("http://qtum:test@localhost:3889", repoData)
+```
+
+The `Qtum` class is an instance of the `qtumjs` API. It provides two main features:
+
++ Access to the `qtumd` RPC service. It is a subclass of [QtumRPC](#qtumrpc).
++ A factory method to instantiate `Contract` instances, for interacting with deployed contracts.
+
+Arg | Type
+--------- | -----------
+url | string
+  | URL of the qtumd RPC service
+repoData | IContractsRepoData
+  | Information about Solidity contracts.
+
+The `repoData` contains the ABI definitions of all the deployed contracts and libraries, as well as deploy addresses. This information is used to instantiate `Contract` instances.
+
+`Contract` instantiated with `Qtum`'s factory method is able to decode all event types found in `repoData`. Whereas a `Contract` constructed manually is only able to decode event types defined in its scope, a limitation due to how the Solidity compiler output ABI definitions.
+
+It is recommended that you use Qtum to instantiate `Contract` instances.
+
+## contract
+
+```ts
+const myToken = qtum.contract("zeppelin-solidity/contracts/token/CappedToken.sol")
+```
+
+> This instantiates the Contract using information [here](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3).
+
+A factory method to instantiate a `Contract` instance using the ABI definitions and address found in `repoData`. The Contract instance is configured with an event log decoder that can decode all known event types found in `repoData`.
+
+Arg | Type
+--------- | -----------
+name | string
+  | Used as key into the `repoData.contracts` map to get contract information.
+
+## rawCall
+
+Inherited from [QtumRPC#rawcall](#rawcall-2)
 
 # Contract
 
