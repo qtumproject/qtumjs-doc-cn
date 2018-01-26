@@ -231,7 +231,18 @@
             <a href="#erc20-example" class="toc-h1 toc-link" data-title="ERC20 Example">ERC20 Example</a>
           </li>
           <li>
-            <a href="#contract" class="toc-h1 toc-link" data-title="Contract">Contract</a>
+            <a href="#qtum" class="toc-h1 toc-link" data-title="Qtum">Qtum</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#contract" class="toc-h2 toc-link" data-title="contract">contract</a>
+                  </li>
+                  <li>
+                    <a href="#rawcall" class="toc-h2 toc-link" data-title="rawCall">rawCall</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#contract-2" class="toc-h1 toc-link" data-title="Contract">Contract</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#constructor" class="toc-h2 toc-link" data-title="constructor">constructor</a>
@@ -263,7 +274,7 @@
             <a href="#qtumrpc" class="toc-h1 toc-link" data-title="QtumRPC">QtumRPC</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#rawcall" class="toc-h2 toc-link" data-title="rawCall">rawCall</a>
+                    <a href="#rawcall-2" class="toc-h2 toc-link" data-title="rawCall">rawCall</a>
                   </li>
                   <li>
                     <a href="#all-rpc-methods" class="toc-h2 toc-link" data-title="All RPC Methods">All RPC Methods</a>
@@ -317,6 +328,9 @@
                   </li>
                   <li>
                     <a href="#irpcgettransactionreceiptbase" class="toc-h2 toc-link" data-title="IRPCGetTransactionReceiptBase">IRPCGetTransactionReceiptBase</a>
+                  </li>
+                  <li>
+                    <a href="#icontractsrepodata" class="toc-h2 toc-link" data-title="IContractsRepoData">IContractsRepoData</a>
                   </li>
               </ul>
           </li>
@@ -387,41 +401,102 @@
 <aside class="notice">
 The default JSON-RPC credential is "qtum:test", running on port 3889
 </aside>
-<h1 id='erc20-example'>ERC20 Example</h1><pre class="highlight javascript"><code><span class="kr">import</span> <span class="p">{</span>
+<h1 id='erc20-example'>ERC20 Example</h1><pre class="highlight typescript"><code><span class="k">import</span> <span class="p">{</span>
   <span class="nx">QtumRPC</span><span class="p">,</span>
-  <span class="nx">Contract</span><span class="p">,</span>
-<span class="p">}</span> <span class="nx">from</span> <span class="s2">"qtumjs"</span>
+<span class="p">}</span> <span class="k">from</span> <span class="s2">"qtumjs"</span>
 
-<span class="kr">const</span> <span class="nx">repo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"./solar.json"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">repoData</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"./solar.json"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">qtum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Qtum</span><span class="p">(</span><span class="s2">"http://qtum:test@localhost:3889"</span><span class="p">,</span> <span class="nx">repoData</span><span class="p">)</span>
 
-<span class="c1">// Connect to docker qtumd JSON-RPC service</span>
-<span class="kr">const</span> <span class="nx">rpc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">QtumRPC</span><span class="p">(</span><span class="s2">"http://qtum:test@localhost:3889"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">myToken</span> <span class="o">=</span> <span class="nx">qtum</span><span class="p">.</span><span class="nx">contract</span><span class="p">(</span><span class="s2">"zeppelin-solidity/contracts/token/CappedToken.sol"</span><span class="p">)</span>
 
-<span class="kr">const</span> <span class="nx">myToken</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Contract</span><span class="p">(</span><span class="nx">rpc</span><span class="p">,</span> <span class="nx">repo</span><span class="p">.</span><span class="nx">contracts</span><span class="p">[</span>
-  <span class="s2">"zeppelin-solidity/contracts/token/CappedToken.sol"</span>
-<span class="p">])</span>
-
-<span class="nx">async</span> <span class="kd">function</span> <span class="nx">transfer</span><span class="p">(</span><span class="nx">fromAddr</span><span class="p">,</span> <span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="nx">tx</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myToken</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"transfer"</span><span class="p">,</span> <span class="p">[</span><span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">],</span> <span class="p">{</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">transfer</span><span class="p">(</span><span class="nx">fromAddr</span><span class="p">,</span> <span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">tx</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">myToken</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"transfer"</span><span class="p">,</span> <span class="p">[</span><span class="nx">toAddr</span><span class="p">,</span> <span class="nx">amount</span><span class="p">],</span> <span class="p">{</span>
     <span class="na">senderAddress</span><span class="p">:</span> <span class="nx">fromAddr</span><span class="p">,</span>
   <span class="p">})</span>
 
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"transfer tx:"</span><span class="p">,</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">txid</span><span class="p">)</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">tx</span><span class="p">)</span>
 
-  <span class="nx">await</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+  <span class="k">await</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"transfer confirmed"</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre>
 <p>Assuming that <code>solar.json</code> contains information about your deployed contracts,
 you can use qtumjs to call the token contract&#39;s method to transfer tokens.</p>
 
+<p>An example <a href="https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example">solar.json</a>. This can be generated automatically using the <a href="https://github.com/qtumproject/solar">solar</a> deployment tool.</p>
+
 <p>The complete example: <a href="https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli">qtumproject/qtumbook-mytoken-qtumjs-cli</a></p>
 
 <p>For contract deployment, see <a href="https://github.com/qtumproject/solar">Solar Smart Contract Deployment Tool</a>.</p>
 
 <p>For fleshed out tutorial, see <a href="https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md">QtumBook - ERC20 With QtumJS</a>.</p>
-<h1 id='contract'>Contract</h1>
+<h1 id='qtum'>Qtum</h1><pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">repoData</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"./solar.json"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">qtum</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Qtum</span><span class="p">(</span><span class="s2">"http://qtum:test@localhost:3889"</span><span class="p">,</span> <span class="nx">repoData</span><span class="p">)</span>
+</code></pre>
+<p>The <code>Qtum</code> class is an instance of the <code>qtumjs</code> API. It provides two main features:</p>
+
+<ul>
+<li>Access to the <code>qtumd</code> RPC service. It is a subclass of <a href="#qtumrpc">QtumRPC</a>.</li>
+<li>A factory method to instantiate <a href="#contract-2">Contract</a> instances, for interacting with deployed contracts.</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>url</td>
+<td>string</td>
+</tr>
+<tr>
+<td></td>
+<td>URL of the qtumd RPC service</td>
+</tr>
+<tr>
+<td>repoData</td>
+<td><a href="#icontractsrepodata">IContractsRepoData</a></td>
+</tr>
+<tr>
+<td></td>
+<td>Information about Solidity contracts.</td>
+</tr>
+</tbody></table>
+
+<p>The <code>repoData</code> contains the ABI definitions of all the deployed contracts and libraries, as well as deploy addresses. This information is used to instantiate <code>Contract</code> instances.</p>
+
+<p><code>Contract</code> instantiated with <code>Qtum</code>&#39;s factory method is able to decode all event types found in <code>repoData</code>. Whereas a <code>Contract</code> constructed manually is only able to decode event types defined in its scope, a limitation due to how the Solidity compiler output ABI definitions.</p>
+
+<p>It is recommended that you use Qtum to instantiate <code>Contract</code> instances.</p>
+<h2 id='contract'>contract</h2><pre class="highlight typescript"><code><span class="kd">const</span> <span class="nx">myToken</span> <span class="o">=</span> <span class="nx">qtum</span><span class="p">.</span><span class="nx">contract</span><span class="p">(</span><span class="s2">"zeppelin-solidity/contracts/token/CappedToken.sol"</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>This instantiates the Contract using information <a href="https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3">here</a>.</p>
+</blockquote>
+
+<p>A factory method to instantiate a <code>Contract</code> instance using the ABI definitions and address found in <code>repoData</code>. The Contract instance is configured with an event log decoder that can decode all known event types found in <code>repoData</code>.</p>
+
+<table><thead>
+<tr>
+<th>Arg</th>
+<th>Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+</tr>
+<tr>
+<td></td>
+<td>Used as key into the <code>repoData.contracts</code> map to get contract information.</td>
+</tr>
+</tbody></table>
+<h2 id='rawcall'>rawCall</h2>
+<p>Inherited from <a href="#rawcall-2">QtumRPC#rawcall</a></p>
+<h1 id='contract-2'>Contract</h1>
 <p>A class abstraction for interacting with a Smart Contract.</p>
 
 <p>This is a more convenient API than using <code>QtumRPC</code> to directly call the RPC&#39;s <code>sendcontract</code> and <code>calltocontract</code> methods. It handles ABI encoding, to convert between JS and Solidity values.</p>
@@ -539,13 +614,13 @@ you can use qtumjs to call the token contract&#39;s method to transfer tokens.</
   </span><span class="s2">"logs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mint"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3e8"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Transfer"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3e8"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
@@ -659,13 +734,13 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
   </span><span class="s2">"logs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mint"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Transfer"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">],</span><span class="w">
@@ -796,7 +871,7 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
       <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"00000000000000000000000000000000000000000000000000000000000003e8"</span><span class="p">,</span>
       <span class="s2">"event"</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Mint"</span><span class="p">,</span>
-        <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+        <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
         <span class="s2">"amount"</span><span class="p">:</span> <span class="s2">"3e8"</span>
       <span class="p">}</span>
     <span class="p">},</span>
@@ -818,8 +893,8 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
       <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"00000000000000000000000000000000000000000000000000000000000003e8"</span><span class="p">,</span>
       <span class="s2">"event"</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Transfer"</span><span class="p">,</span>
-        <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span>
-        <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+        <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0000000000000000000000000000000000000000"</span><span class="p">,</span>
+        <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
         <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"3e8"</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -937,8 +1012,8 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
   <span class="s2">"logs"</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span>
       <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Transfer"</span><span class="p">,</span>
-      <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0x57142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
-      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xc0ed80283c53c300c31c2bda6eca841e53cb6a21"</span><span class="p">,</span>
+      <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"57142e3bcf000f28890b5d979afc7ea90204e1de"</span><span class="p">,</span>
+      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"c0ed80283c53c300c31c2bda6eca841e53cb6a21"</span><span class="p">,</span>
       <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"1ba5add5700"</span>
     <span class="p">}</span>
   <span class="p">],</span>
@@ -1002,10 +1077,10 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 </tr>
 <tr>
 <td></td>
-<td>URL of qtumd RPC</td>
+<td>URL of the qtumd RPC service</td>
 </tr>
 </tbody></table>
-<h2 id='rawcall'>rawCall</h2>
+<h2 id='rawcall-2'>rawCall</h2>
 <blockquote>
 <p>Call the <code>getinfo</code> RPC method to get basic information about the Qtum blockchain:</p>
 </blockquote>
@@ -1335,13 +1410,13 @@ signmessage "address" "message"
   <span class="s2">"logs"</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span>
       <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Mint"</span><span class="p">,</span>
-      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
       <span class="s2">"amount"</span><span class="p">:</span> <span class="s2">"3e8"</span>
     <span class="p">},</span>
     <span class="p">{</span>
       <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Transfer"</span><span class="p">,</span>
-      <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span>
-      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+      <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0000000000000000000000000000000000000000"</span><span class="p">,</span>
+      <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
       <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"3e8"</span>
     <span class="p">}</span>
   <span class="p">]</span>
@@ -1501,13 +1576,13 @@ signmessage "address" "message"
   </span><span class="s2">"logs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mint"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Transfer"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7d0"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">],</span><span class="w">
@@ -1646,7 +1721,7 @@ signmessage "address" "message"
   <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"00000000000000000000000000000000000000000000000000000000000003e8"</span><span class="p">,</span>
   <span class="s2">"event"</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Mint"</span><span class="p">,</span>
-    <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+    <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
     <span class="s2">"amount"</span><span class="p">:</span> <span class="s2">"3e8"</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -1670,8 +1745,8 @@ signmessage "address" "message"
 </blockquote>
 <pre class="highlight javascript"><code><span class="p">{</span>
   <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Transfer"</span><span class="p">,</span>
-  <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span>
-  <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"0xdcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
+  <span class="s2">"from"</span><span class="p">:</span> <span class="s2">"0000000000000000000000000000000000000000"</span><span class="p">,</span>
+  <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"dcd32b87270aeb980333213da2549c9907e09e94"</span><span class="p">,</span>
   <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"3e8"</span>
 <span class="p">}</span>
 </code></pre>
@@ -1693,7 +1768,68 @@ signmessage "address" "message"
 
   <span class="nl">contractAddress</span><span class="p">:</span> <span class="kr">string</span>
 <span class="p">}</span>
+</code></pre><h2 id='icontractsrepodata'>IContractsRepoData</h2>
+<p>Information about contracts</p>
+<pre class="highlight typescript"><code><span class="k">export</span> <span class="kr">interface</span> <span class="nx">IContractsRepoData</span> <span class="p">{</span>
+  <span class="cm">/**
+   * Information about deployed contracts
+   */</span>
+  <span class="nl">contracts</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">IContractInfo</span><span class="p">,</span>
+  <span class="p">},</span>
+
+  <span class="cm">/**
+   * Information about deployed libraries
+   */</span>
+  <span class="nx">libraries</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">IContractInfo</span><span class="p">,</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+   * Information of contracts referenced by deployed contract/libraries, but not deployed
+   */</span>
+  <span class="nl">related</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="p">{</span>
+      <span class="nl">abi</span><span class="p">:</span> <span class="nx">IABIMethod</span><span class="p">[],</span>
+    <span class="p">},</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * The minimal deployment information necessary to interact with a
+ * deployed contract.
+ */</span>
+<span class="k">export</span> <span class="kr">interface</span> <span class="nx">IContractInfo</span> <span class="p">{</span>
+  <span class="cm">/**
+   * Contract's ABI definitions, produced by solc.
+   */</span>
+  <span class="nl">abi</span><span class="p">:</span> <span class="nx">IABIMethod</span><span class="p">[]</span>
+
+  <span class="cm">/**
+   * Contract's address
+   */</span>
+  <span class="nl">address</span><span class="p">:</span> <span class="kr">string</span>
+
+  <span class="cm">/**
+   * The owner address of the contract
+   */</span>
+  <span class="nx">sender</span><span class="p">?:</span> <span class="kr">string</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kr">interface</span> <span class="nx">IABIMethod</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="kd">type</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="nx">payable</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">,</span>
+  <span class="nx">inputs</span><span class="p">:</span> <span class="nx">IABIInput</span><span class="p">[],</span>
+  <span class="nx">outputs</span><span class="p">:</span> <span class="nx">IABIOutput</span><span class="p">[],</span>
+  <span class="nx">constant</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">,</span>
+  <span class="nx">anonymous</span><span class="p">:</span> <span class="kr">boolean</span><span class="p">,</span>
+<span class="p">}</span>
 </code></pre>
+<p>This can be generated automatically using the <a href="https://github.com/qtumproject/solar">solar</a> deployment tool.</p>
+
+<p>An example <a href="https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example">solar.json</a>.</p>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
