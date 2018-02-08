@@ -402,7 +402,7 @@
 The default JSON-RPC credential is "qtum:test", running on port 3889
 </aside>
 <h1 id='erc20-example'>ERC20 Example</h1><pre class="highlight typescript"><code><span class="k">import</span> <span class="p">{</span>
-  <span class="nx">QtumRPC</span><span class="p">,</span>
+  <span class="nx">Qtum</span><span class="p">,</span>
 <span class="p">}</span> <span class="k">from</span> <span class="s2">"qtumjs"</span>
 
 <span class="kd">const</span> <span class="nx">repoData</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"./solar.json"</span><span class="p">)</span>
@@ -534,6 +534,8 @@ you can use qtumjs to call the token contract&#39;s method to transfer tokens.</
 <td>Information for the deployed contract</td>
 </tr>
 </tbody></table>
+
+<p>It is recommended that you use <a href="#contract">Qtum#contract</a> instead of this constructor.</p>
 <h2 id='call'>call</h2><pre class="highlight javascript"><code><span class="nx">async</span> <span class="kd">function</span> <span class="nx">totalSupply</span><span class="p">()</span> <span class="p">{</span>
   <span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myToken</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s2">"totalSupply"</span><span class="p">)</span>
 
@@ -626,7 +628,7 @@ you can use qtumjs to call the token contract&#39;s method to transfer tokens.</
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Executes contract method on your own local qtumd node as a &quot;simulation&quot;, returning results, but not changing the blockchain.</p>
+<p>Executes contract method on your own local qtumd node as a &quot;simulation&quot; using <code>callcontract</code>. It is free, and does not actually modify the blockchain.</p>
 
 <p>This is free.</p>
 
