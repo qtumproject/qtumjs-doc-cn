@@ -70,7 +70,7 @@ The default JSON-RPC credential is "qtum:test", running on port 3889
 
 ```ts
 import {
-  QtumRPC,
+  Qtum,
 } from "qtumjs"
 
 const repoData = require("./solar.json")
@@ -173,6 +173,8 @@ Arg | Type | Description
 rpc | QtumRPC | The RPC instance used to interact with the contract.
 info | [IContractInfo](#icontractinfo) | Information for the deployed contract
 
+It is recommended that you use [Qtum#contract](#contract) instead of this constructor.
+
 ## call
 
 ```js
@@ -272,7 +274,7 @@ const result = await myToken.call("mint", ["dcd32b87270aeb980333213da2549c9907e0
 }
 ```
 
-Executes contract method on your own local qtumd node as a "simulation", returning results, but not changing the blockchain.
+Executes contract method on your own local qtumd node as a "simulation" using `callcontract`. It is free, and does not actually modify the blockchain.
 
 This is free.
 
