@@ -8,34 +8,33 @@ language_tabs:
 search: true
 ---
 
-# Introduction
+# 介绍
 
-> To install qtumjs
+> 安装 qtumjs
 
 ```
 npm install qtumjs
 ```
 
-QtumJS is a JavaScript library for developing DApp on the Qtum blockchain. You can use this library to develop frontend UI that runs in the browser, as well as backend server scripts that run in NodeJS.
+QtumJS是一个用于在Qtum区块链上开发DApp的JavaScript库。您可以使用此库来开发在浏览器中运行的前端UI以及在NodeJS中运行的后端脚本。
 
-The main classes are:
-
-Class | Description
+主要的类：
+类 | 描述
 --------- | -----------
-QtumRPCRaw | Direct access to `qtumd`'s blockchain RPC service, using JSONRPC 1.0 calling convention.
-QtumRPC | Wrapper for `QtumRPCRaw`, to provide interface like JSONRPC 2.0.
-Contract | An abstraction for interacting with smart contracts. Handles [ABI encoding/decoding](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI).
+QtumRPCRaw | 使用 JSONRPC 1.0调用合约，直接访问 `qtumd` 的区块链 RPC 服务。
+QtumRPC | `QtumRPCRaw` 的封装，提供像 JSONRPC 2.0 这样的接口。
+Contract | 与智能合约交互的抽象层。使用 [ABI encoding/decoding](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI).
 
-QtumJS is developed using [TypeScript](https://www.typescriptlang.org/), and as such, comes with robust type definitions for all the APIs. We recommend using [VSCode](https://code.visualstudio.com/) to take advantage of language support, such as type hinting and autocompletion.
+QtumJS 使用 [TypeScript](https://www.typescriptlang.org/) 开发, 因此为所有 API 提供了健壮的类型定义。 我们建议使用 [VSCode](https://code.visualstudio.com/) 来获得语言支持，例如类型提示和自动完成。
 
-But you can also choose to use plain JavaScript and notepad if you prefer.
+当然，你愿意的话也可以选择使用普通的 JavaScript 和记事本。
 
-This document is the reference for QtumJS API, and its basic uses. For a tutorial-style introduction to QtumJS, see: [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
+本文档是 QtumJS API 及其基本用法的参考文档。有关 QtumJS 的教程式介绍，查看: [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
 
 
-## Running Qtum RPC
+## 运行 Qtum RPC
 
-> To run qtumd in development mode.
+> 开发模式运行 qtumd：
 
 ```
 docker run -it --rm \
@@ -45,7 +44,7 @@ docker run -it --rm \
   hayeah/qtumportal
 ```
 
-> To run qtumd for the test network (testnet):
+> 测试网络（testnet）运行 qtumd：
 
 ```
 docker run -it --rm \
@@ -56,17 +55,16 @@ docker run -it --rm \
   hayeah/qtumportal
 ```
 
+QtumJS 依赖 `qtumd` 提供的访问 QTUM 区块链的 JSON-RPC 服务。
 
-QtumJS relies on `qtumd` to provide the JSON-RPC service for accessing the QTUM blockchain.
-
-For more details, see: [QtumBook - Running QTUM](https://github.com/qtumproject/qtumbook/blob/master/SUMMARY.md#part-1---running-qtum).
+更多细节请查看: [QtumBook - Running QTUM](https://github.com/qtumproject/qtumbook/blob/master/SUMMARY.md#part-1---running-qtum).
 
 
 <aside class="notice">
-The default JSON-RPC credential is "qtum:test", running on port 3889
+默认 JSON-RPC 是 “qtum：test”，运行端口为 3889
 </aside>
 
-# ERC20 Example
+# ERC20 实例
 
 ```ts
 import {
@@ -91,16 +89,15 @@ async function transfer(fromAddr, toAddr, amount) {
 }
 ```
 
-Assuming that `solar.json` contains information about your deployed contracts,
-you can use qtumjs to call the token contract's method to transfer tokens.
+假设 `solar.json` 包含已部署的合约，则可以使用 qtumjs 调用代币合约的方法来流通代币。
 
-An example [solar.json](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example). This can be generated automatically using the [solar](https://github.com/qtumproject/solar) deployment tool.
+一个实例 [solar.json](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example). 这个可以使用 [solar](https://github.com/qtumproject/solar) 部署工具自动生成。
 
-The complete example: [qtumproject/qtumbook-mytoken-qtumjs-cli](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli)
+完整实例: [qtumproject/qtumbook-mytoken-qtumjs-cli](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli)
 
-For contract deployment, see [Solar Smart Contract Deployment Tool](https://github.com/qtumproject/solar).
+合约开发, 查看 [Solar Smart Contract Deployment Tool](https://github.com/qtumproject/solar).
 
-For fleshed out tutorial, see [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
+为了充实教程, 查看 [QtumBook - ERC20 With QtumJS](https://github.com/qtumproject/qtumbook/blob/master/part2/erc20-js.md).
 
 # Qtum
 
@@ -109,23 +106,24 @@ const repoData = require("./solar.json")
 const qtum = new Qtum("http://qtum:test@localhost:3889", repoData)
 ```
 
-The `Qtum` class is an instance of the `qtumjs` API. It provides two main features:
+`Qtum` 是 `qtumjs` API 的一个对象. 它提供两个主要功能：
 
-+ Access to the `qtumd` RPC service. It is a subclass of [QtumRPC](#qtumrpc).
-+ A factory method to instantiate [Contract](#contract-2) instances, for interacting with deployed contracts.
++ 对 `qtumd` RPC 服务的访问. 它是 [QtumRPC](#qtumrpc) 的子类.
++ 实例化 [Contract](#contract-2) 对象的工厂方法, 用于与已部署的合约进行交互。
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 url | string
-  | URL of the qtumd RPC service
+ | qtumd RPC 服务的 URL
 repoData | [IContractsRepoData](#icontractsrepodata)
-  | Information about Solidity contracts.
+ | 关于 Solidity 合约的信息.
 
-The `repoData` contains the ABI definitions of all the deployed contracts and libraries, as well as deploy addresses. This information is used to instantiate `Contract` instances.
+`repoData` 包含所有已部署合约或库的 ABI 定义，以及它们的部署地址。这些信息用于实例化 `Contract` 实例。
 
-`Contract` instantiated with `Qtum`'s factory method is able to decode all event types found in `repoData`. Whereas a `Contract` constructed manually is only able to decode event types defined in its scope, a limitation due to how the Solidity compiler output ABI definitions.
 
-It is recommended that you use Qtum to instantiate `Contract` instances.
+使用 `Qtum` 的工厂方法实例化的 `Contract` 对象能够解码所有在 `repoData` 里的事件类型. 但是手动构建的合约只能解码在其范围内定义的事件类型, 这也是 Solidity 编译器输出 ABI 定义的限制。
+
+建议使用 Qtum 来实例化 `Contract` 对象.
 
 ## contract
 
@@ -133,30 +131,30 @@ It is recommended that you use Qtum to instantiate `Contract` instances.
 const myToken = qtum.contract("zeppelin-solidity/contracts/token/CappedToken.sol")
 ```
 
-> This instantiates the Contract using information [here](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3).
+> 实例化这个合约使用了 [这些](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3) 信息。
 
-A factory method to instantiate a `Contract` instance using the ABI definitions and address found in `repoData`. The Contract instance is configured with an event log decoder that can decode all known event types found in `repoData`.
+实例化 `Contract` 对象的工厂方法，使用了 `repoData` 中的 ABI 定义和地址。合约对象是使用一个事件 log 解码器来配置的，这个解码器能解码所有 `repoData` 中已知的事件类型。
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 name | string
-  | Used as key into the `repoData.contracts` map to get contract information.
+  | 作为 `repoData.contracts` map 的 key，用于获取合约信息。
 
 ## rawCall
 
-Inherited from [QtumRPC#rawcall](#rawcall-2)
+继承自 [QtumRPC#rawcall](#rawcall-2)
 
 # Contract
 
-A class abstraction for interacting with a Smart Contract.
+与智能合约交互的抽象层。
 
-This is a more convenient API than using `QtumRPC` to directly call the RPC's `sendcontract` and `calltocontract` methods. It handles ABI encoding, to convert between JS and Solidity values.
+这比使用 `QtumRPC` 直接调用 RPC 的 `sendcontract` 和 `calltocontract` 方法更方便。它处理 ABI 编码，转换 JS 和 Solidity 值。
 
-* API for confirming transactions.
-* API for invoking contract's methods using `call` or `send` .
-* API for getting contract's log events.
+* 有 API 用于确认交易。
+* 有 API 用于调用合约方法，使用 `call` 或 `send` .
+* 有 API 用于获取合约 log 事件。
 
-## constructor
+## 构造函数
 
 ```js
 const rpc = new QtumRPC("http://qtum:test@localhost:3889")
@@ -166,14 +164,14 @@ const myToken = new Contract(rpc, repo.contracts[
 ])
 ```
 
-> The contract [info](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3) may be generated by [solar](https://github.com/qtumproject/solar).
+> 合约 [信息](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example#L3) 可以使用 [solar](https://github.com/qtumproject/solar). 生成
 
-Arg | Type | Description
+参数 | 类型 | 描述
 --------- | ----------- | -----------
-rpc | QtumRPC | The RPC instance used to interact with the contract.
-info | [IContractInfo](#icontractinfo) | Information for the deployed contract
+rpc | QtumRPC | RPC 对象，用于与合约进行交互
+info | [IContractInfo](#icontractinfo) | 信息，用于部署合约
 
-It is recommended that you use [Qtum#contract](#contract) instead of this constructor.
+建议使用 [Qtum#contract](#contract) 而不是这个构造器。
 
 ## call
 
@@ -188,7 +186,7 @@ async function totalSupply() {
 }
 ```
 
-> Example output:
+> 实例输出:
 
 ```js
 { address: 'a778c05f1d0f70f1133f4bbf78c1a9a7bf84aed3',
@@ -210,13 +208,13 @@ async function totalSupply() {
   outputs: [ <BN: 36b0> ] }
 ```
 
-> A simulated "mint" call:
+> 模拟 "mint" 调用:
 
 ```ts
 const result = await myToken.call("mint", ["dcd32b87270aeb980333213da2549c9907e09e94", 1000])
 ```
 
-> Result:
+> 运行结果:
 
 ```json
 {
@@ -274,20 +272,20 @@ const result = await myToken.call("mint", ["dcd32b87270aeb980333213da2549c9907e0
 }
 ```
 
-Executes contract method on your own local qtumd node as a "simulation" using `callcontract`. It is free, and does not actually modify the blockchain.
+使用 `callcontract` 在你本地 qtumd 节点 “模拟” 执行合约方法。这是免费的，实际上并不修改区块链。
 
-This is free.
+这个免费。
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 method | string
-  | Name of the contract method.
+  | 合约方法名
 args | Array\<any>
-  | Arguments for calling the method
+  | 调用方法的参数
 opts | IContractCallRequestOptions
-  | call options
+  | 调用配置项
 @return | Promise\<[IContractCallResult](#icontractcallresult)>
-  | call result, with ABI decoded outputs
+  | 调用结果，带有 ABI 解码的输出
 
 ## send
 
@@ -309,7 +307,7 @@ async function mint(toAddr, amount) {
 }
 ```
 
-> Example output:
+> 实例输出:
 
 ```
 mint tx: 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9
@@ -335,7 +333,7 @@ mint tx: 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9
   confirm: [Function: confirm] }
 ```
 
-> The callback would print 3 times, for each confirmation:
+> 回调打印 3 次，分别对应每次确认
 
 ```
 new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 1
@@ -343,7 +341,7 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd9 3
 ```
 
-> The returned transaction receipt after confirmation:
+> 确认后返回的交易收据：
 
 ```json
 
@@ -392,33 +390,33 @@ new confirmation 858347704258506012f538b19b9702d636dc350bc25a7e60d404bf3d2c08efd
 }
 ```
 
-Creates a transaction that executes contract method globally on the network, changing the blockchain.
+创建一个交易，在网络全局执行合约方法，会改变区块链。
 
-This costs gas.
+这要花费 gas.
 
-There are two asynchronous steps to a transaction:
+对一个合约有 2 个异步步骤
 
-1. You submit the the transaction to the network.
-2. Once submitted, wait for a required number of confirmations.
+1. 你提交交易到网络
+2. 一旦提交，等待一个指定的确认数
 
-After successful confirmation, the transaction receipt ([IContractSendReceipt](#icontractsendreceipt)) with ABI decoded event logs is returned.
+成功确认后，返回带有ABI解码的事件日志的交易收据 ([IContractSendReceipt](#icontractsendreceipt))
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 method | string
-  | Name of the contract method.
+  | 合约方法名
 args | Array\<any>
-  | Arguments for calling the method
+  | 所调用方法的参数
 opts | [IContractSendRequestOptions](#icontractsendrequestoptions)
-  | *optional* send options
+  | *可选* 发送配置项
 @return | Promise\<[IContractSendResult](#icontractsendresult)>
-  | call result, with ABI decoded outputs
+  | 调用结果, 带有 ABI 解码的输出
 
-## Method Overloading
+## 方法重载
 
-If there is no ambiguity, use the method name to call/send a method. If the same method name has multiple definitions, use the method signature to call/send a method.
+如果没有歧义，使用方法名称来调用/发送方法。 如果相同方法名称具有多个定义，请使用方法签名来调用/发送方法。
 
-> The name foo may have multiple method definitions:
+> 方法名 foo 可能有多个定义:
 
 ```ts
 function foo();
@@ -427,14 +425,14 @@ function foo(uint256 _a, uint256 _b);
 function foo(int256 _a, int256 _b);
 ```
 
-> `foo` methods with arity 0 and arity 1 have no ambiguity. Can call directly.
+> `foo` 方法有 0 个参数和有 1 个参数没有歧义。可以直接调用。
 
 ```ts
 contract.call("foo")
 contract.call("foo", [1])
 ```
 
-> `foo` methods with arity 2 are ambiguous, must call with full method signature:
+> `foo` 方法带 2 个参数的有歧义，必须带完整方法签名：
 
 ```ts
 contract.call("foo(uint256,uint256)", [1, 2])
@@ -455,7 +453,7 @@ async function getLogs(fromBlock=0, toBlock="latest") {
 }
 ```
 
-> Example Output
+> 实例输出
 
 ```js
 {
@@ -510,19 +508,19 @@ async function getLogs(fromBlock=0, toBlock="latest") {
 }
 ```
 
-Get [Solidity event logs](http://solidity.readthedocs.io/en/develop/abi-spec.html#events) generated by the contract.
+获取由合约生成的 [Solidity 事件日志](http://solidity.readthedocs.io/en/develop/abi-spec.html#events) 。
 
-The options can limit events log query to a block number range by specifying `fromBlock` and `toBlock`. For example, you could query for event logs between block 1000 to 1500.
+通过指定 `fromBlock` 和 `toBlock`，可以将事件日志查询限制块号范围。 例如，可以查询块 1000 到 1500 之间的事件日志。
 
-Moreover, you can use `minconf` to specify the minimum number of confirmations before an event log would be returned in the result.
+此外，你可以使用 `minconf` 指定事件日志之前确认的最小数量作为结果返回。
 
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
-  | Event logs query parameters
+  | 事件日志查询参数
 @return | Promise\<[IContractEventLogs](#icontracteventlogs)>
-  | Log query result, with ABI decoded outputs
+  | 日志查询结果，带有 ABI 解码的输出
 
 ## onLogs
 
@@ -532,14 +530,14 @@ myToken.onLog((entry) => {
 }, { minconf: 1 })
 ```
 
-Subscribe to contract's new events. The callback is invoked each time a new event is received. By default, `onLog` start listening for logs from the tip of the blockchain. Use `fromBlock` to also receive older events.
+订阅合约新事件。每次收到新事件时都会调用回调。默认情况下，`onLog` 监听来自区块链顶端的日志。 使用 `fromBlock` 也可以接收较早的事件。
 
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 callback | (entry: [IContractEventLog](#icontracteventlog)) => void
 opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
-  | Event logs query parameters
+  | 事件日志查询参数
 
 ## logEmitter
 
@@ -559,16 +557,16 @@ this.emitter.on("?", (event) => {
 })
 ```
 
-Subscribe to contract's new events, using the [EventsEmitter](https://github.com/primus/eventemitter3) interface. The events emitted are instances of [IContractEventLog](#icontracteventlog)
+使用 [EventsEmitter](https://github.com/primus/eventemitter3) 接口订阅合约新事件。发出的事件是 [IContractEventLog](#icontracteventlog) 对象。
 
-The Solidity events names are used as the emitted event names.
+Solidity 事件名作为发出的事件名使用。
 
-Events that lack ABI definitions (thus cannot be parsed) are emitted as "?".
+缺失 ABI 定义的事件 (即不能解析) 会发送 "?".
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 opts | [IRPCWaitForLogsRequest](#irpcwaitforlogsrequest)
-  | Event logs query parameters
+  | 事件日志查询参数
 
 ## receipt
 
@@ -578,7 +576,7 @@ const receipt = await qrcToken.receipt(txid)
 console.log(JSON.stringify(receipt, null, 2))
 ```
 
-> Example output
+> 实例输出
 
 ```js
 {
@@ -613,16 +611,16 @@ console.log(JSON.stringify(receipt, null, 2))
 }
 ```
 
-Get the receipt for a transaction that had been accepted by the network. If the transaction had not been confirmed, null is returned.
+获取已被网络接受的交易收据。 如果交易尚未确认，则返回空值。
 
-The event logs for that transaction are ABI-encoded.
+交易事件日志是 ABI 编码
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 txid | string
-  | Transaction ID
+  | 交易 ID
 @return | Promise\<[IContractSendReceipt](#icontractsendreceipt)>
-  | Transaction receipt, with event logs.
+  | 交易收据, 带有事件日志.
 
 # QtumRPC
 
@@ -630,27 +628,28 @@ txid | string
 const rpc = new QtumRPC('http://qtum:test@localhost:3889');
 ```
 
-This is a JSON-RPC client for direct access to the `qtumd` RPC API. It does not handle any ABI-encoding or decoding for you.
+这是一个用于直接访问 `qtumd` RPC API 的 JSON-RPC 客户端。它不会为你处理任何 ABI 编码或解码。
 
-You may included the RPC user & password in the URL if required. In the sample, the user is `qtum` and the password is `test`.
+有需要的话你可以把 RPC 用户名和密码包含到 URL 里。在例子中，用户名是 `qtum` ，密码是 `test`.
 
-Note: The `QtumRPC` class has a few undocumented public methods used internally by the `Contract` abstraction. Consider anything undocumented unsupported that could change in the future. Right now `rawCall` is the only public API.
+QtumRPC类有一些在合约抽象内部使用的未公开的方法。 考虑将来可能会发生变化的任何未经证实的不受支持的内容。 现在，rawCall是唯一的公共API。
+注意: `QtumRPC` 类有一些没文档的 public 方法在 `Contract` 抽象层内部使用到了. 你要考虑到之后可能不支持的无文档的内容. 现在 `rawCall` 是唯一发布的 API.
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 url | string
-    | URL of the qtumd RPC service
+    | qtumd RPC 服务的 URL
 
 ## rawCall
 
-> Call the `getinfo` RPC method to get basic information about the Qtum blockchain:
+> 调用 `getinfo` RPC 方法以获取 Qutm 区块链的基本信息：
 
 ```ts
 const info = await rpc.rawCall("getinfo")
 console.log(info)
 ```
 
-> Output of `getinfo`:
+> `getinfo` 的输出:
 
 ```js
 { version: 141300,
@@ -674,9 +673,9 @@ console.log(info)
   errors: '' }
 ```
 
-Makes a JSON-RPC 1.0 method call, and return the result. This method throws an error if the JSON API returns a non-200 HTTP result.
+发起一个 JSON-RPC 1.0 方法调用, 返回调用结果. 如果 JSON API 返回不是 200 HTTP 结果，则抛出错误。
 
-> Using `try...catch` to handle error:
+> 使用 `try...catch` 处理错误:
 
 ```ts
 async function main() {
@@ -688,9 +687,9 @@ async function main() {
 }
 ```
 
-## All RPC Methods
+## All RPC 方法
 
-All RPC methods supported by qtumd.
+qtumd 支持的所有 RPC 方法 .
 
 ```
 == Blockchain ==
@@ -826,58 +825,58 @@ settxfee amount
 signmessage "address" "message"
 ```
 
-## Example: getblockcount
+## 实例: getblockcount
 
-Returns the number of blocks in the longest blockchain.
+返回最长的区块链的块数。
 
 ```ts
 const result = await rpc.rawCall("getblockcount")
 ```
 
-> Result
+> 结果
 
 ```
 85687
 ```
 
-## Example: getnewaddress
+## 实例: getnewaddress
 
-Returns a new Qtum address for receiving payments. This might be useful for exchanges that need to generate deposit addresses for users.
+返回接收付款的新 Qtum 地址。可能对要为用户生成存款地址的交易所有用。
 
 ```ts
 const result = await rpc.rawCall("getnewaddress")
 ```
 
-> Result
+> 结果
 
 ```
 QSnrDTj4UNcRwKdhY8sUZEd74VzwqeAddW
 ```
 
-## Example: fromhexaddress
+## 实例: fromhexaddress
 
-Converts a base58 pubkeyhash address to a hex address for use in smart contracts.
+把一个 base58 pubkeyhash 地址转化成 16 进制地址用于智能合约。
 
 ```ts
 const result = await rpc.rawCall("gethexaddress", ["QSnrDTj4UNcRwKdhY8sUZEd74VzwqeAddW"])
 ```
 
-> Result
+> 结果
 
 ```
 43debdac95a0eaa4ff92d6b873944a4d92beae59
 ```
 
-## Example: gettransactionreceipt
+## 实例: gettransactionreceipt
 
-Get the receipt of a confirmed transaction.
+获得确认交易的收据。
 
 ```ts
 const txid = "62fecfd27d71ddb260ac48c73c8f0f87e96d0b3a598ed2c2251caa4e6f9a9d97"
 const result = await rpc.rawCall("gettransactionreceipt", [txid])
 ```
 
-> Result
+> 结果
 
 ```js
 [
@@ -906,44 +905,44 @@ const result = await rpc.rawCall("gettransactionreceipt", [txid])
 ]
 ```
 
-# Types Lexicon
+# 类型词典
 
 ## IContractInfo
 
 ```ts
 export interface IContractInfo {
   /**
-   * Contract's ABI definitions, produced by solc.
+   * 合约的 ABI 定义, solc 生成.
    */
   abi: IABIMethod[]
 
   /**
-   * Contract's address
+   * 合约地址
    */
   address: string
 
   /**
-   * The owner address of the contract
+   * 合约所有者的地址
    */
   sender?: string
 }
 ```
 
-The minimal deployment information necessary to interact with a deployed contract.
+与部署合约交互所需的最少部署信息。
 
 ## IContractCallResult
 
-The result of calling a contract method, with decoded outputs and logs.
+调用一个合约方法的返回结果，带有解码的输出和日志。
 
 ```ts
 export interface IContractCallResult extends IRPCCallContractResult {
   /**
-   * ABI-decoded outputs
+   * ABI 解码的输出
    */
   outputs: any[]
 
   /**
-   * ABI-decoded logs
+   * ABI 解码的日志
    */
   logs: Array<IDecodedSolidityEvent | null>
 }
@@ -971,7 +970,7 @@ export interface IExecutionResult {
 }
 ```
 
-> Example:
+> 实例:
 
 ```js
 {
@@ -1029,34 +1028,34 @@ export interface IExecutionResult {
 }
 ```
 
-The return type of `Contract#call`.
+`Contract#call` 的返回类型.
 
 ## IContractSendRequestOptions
 
-Options for [Contract#send](#send)
+[Contract#send](#send) 的配置项
 
 ```ts
 /**
- * Options for `send` to a contract method.
+ * `send` 合约方法的配置项.
  */
 export interface IContractSendRequestOptions {
   /**
-   * The amount in QTUM to send. eg 0.1, default: 0
+   * 要发送的 QTUM 数. 例如 0.1, 默认: 0
    */
   amount?: number | string
 
   /**
-   * gasLimit, default: 200000, max: 40000000
+   * gasLimit, 默认: 200000, 最大: 40000000
    */
   gasLimit?: number
 
   /**
-   * Qtum price per gas unit, default: 0.00000001, min:0.00000001
+   * 每 gas 的 Qtum 价格, 默认: 0.00000001, 最小:0.00000001
    */
   gasPrice?: number | string
 
   /**
-   * The quantum address that will be used as sender.
+   * 发送者的 quantum 地址
    */
   senderAddress?: string
 }
@@ -1071,30 +1070,30 @@ await tx.confirm(3, (updatedTx, receipt) => {
 })
 ```
 
-Return value of [Contract#send](#send).
+返回 [Contract#send](#send) 的值。
 
-The `confirm` method is used to wait for transaction confirmations.
+`confirm` 方法用来等待交易确认。
 
-The arguments for `confirm`:
+`confirm` 方法的参数:
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 n | number
-  | *optional* Number of confirmations to wait for.
+  | *可选* 须等待的确认数
 callback | IContractSendConfirmationHandler
-  | *optional* The callback function invoked for each additional confirmation
+  | *可选* 回调函数，每次确认都会调用
 
 
-The callback values are:
+回调值为:
 
-Arg | Type
+参数 | 类型
 --------- | -----------
 updatedTx | IRPCGetTransactionResult
-  | Basic information about a transaction submitted to the network.
+  | 关于提交给网络的交易的基本信息
 receipt | IContractSendReceipt
-  | Additional information about a confirmed transaction.
+  | 关于已确认交易的其他信息
 
-### References
+### 参考
 
 + [IRPCGetTransactionResult](#irpcgettransactionresult)
 + [IContractSendReceipt](#icontractsendreceipt)
@@ -1119,42 +1118,42 @@ export interface IRPCGetTransactionResult {
 }
 ```
 
-Basic information about a transaction submitted to the network.
+关于提交给网络的交易的基本信息。
 
 ## IContractSendReceipt
 
-The transaction receipt for [Contract#send](#send), with the event logs decoded.
+[Contract#send](#send) 的合约收据, 带有解码的事件日志
 
 ```ts
 export interface IContractSendReceipt extends IRPCGetTransactionReceiptBase {
   /**
-   * logs decoded using ABI
+   * 使用 ABI 解码的日志
    */
   logs: IDecodedLog[],
 
   /**
-   * undecoded logs
+   * 未解码的日志
    */
   rawlogs: ITransactionLog[],
 }
 
 /**
- * A decoded Solidity event log
+ * 解码的 Solidity 事件日志
  */
 export interface IDecodedLog {
   /**
-   * The event log's name
+   * 事件日志名称
    */
   type: string
 
   /**
-   * Arguments to event log as key-value map
+   * 键值映射作为事件日志参数
    */
   [key: string]: any
 }
 ```
 
-> Example
+> 实例
 
 ```json
 {
@@ -1202,7 +1201,7 @@ export interface IDecodedLog {
 }
 ```
 
-### References
+### 参考
 
 * [IRPCGetTransactionReceiptBase](#irpcgettransactionreceiptbase)
 
@@ -1211,22 +1210,22 @@ export interface IDecodedLog {
 ```ts
 export interface IRPCWaitForLogsRequest {
   /**
-   * The block number to start looking for logs.
+   * 查找日志的开始块号。
    */
   fromBlock?: number | "latest",
 
   /**
-   * The block number to stop looking for logs. If null, will wait indefinitely into the future.
+   * 查找日志的停止块号. 如果是 null, 会无限期等待
    */
   toBlock?: number | "latest",
 
   /**
-   * Filter conditions for logs. Addresses and topics are specified as array of hexadecimal strings
+   * 过滤日志的条件。 地址和主题分别指定为十六进制字符串数组
    */
   filter?: ILogFilter,
 
   /**
-   * Minimal number of confirmations before a log is returned
+   * 日志返回前的最少确认数
    */
   minconf?: number,
 }
@@ -1236,61 +1235,60 @@ export interface IRPCWaitForLogsRequest {
 
 ```ts
 /**
- * Query result of a contract's event logs.
+ * 查询合约事件日志的结果。
  */
 export interface IContractEventLogs {
   /**
-   * Event logs, ABI decoded.
+   * 事件日志, ABI 解码.
    */
   entries: IContractEventLog[]
 
   /**
-   * Number of event logs returned.
+   * 返回的事件日志数
    */
   count: number
 
   /**
-   * The block number to start query for new event logs.
+   * 要开始查询新事件日志的块号
    */
   nextblock: number
 }
 ```
 
-Query result of a contract's event logs.
+查询合约事件日志的结果。
 
-To query for new logs that have not yet been seen, use `nextblock` as `startBlock` when querying for event logs.
-
+要查询尚未出现的新日志，请在查询事件日志时将 `nextblock` 用作 `startBlock`：
 * [IContractEventLog](#icontracteventlog)
 
 ## IContractEventLog
 
-A decoded contract event log.
+一条解码的合约事件日志
 
 ```ts
 export interface IContractLogEntry extends ILogEntry {
   /**
-   * Solidity event, ABI decoded. Null if no ABI definition is found.
+   * Solidity 事件, ABI 解码. 如果没有找到 ABI 定义，为 Null
    */
   event?: ISolidityEvent
 }
 
 /**
- * The raw log data returned by qtumd, not ABI decoded.
+ *  qtumd 返回的原始日志数据，不是 ABI 解码
  */
 export interface ILogEntry extends IRPCGetTransactionReceiptBase {
   /**
-   * EVM log topics
+   * EVM 日志主题
    */
   topics: string[]
 
   /**
-   * EVM log data, as hexadecimal string
+   * EVM 日志数据, 十六进制字符串
    */
   data: string
 }
 
 /**
- * Transaction receipt returned by qtumd
+ * qtumd 返回的交易收据
  */
 export interface IRPCGetTransactionReceiptBase {
   blockHash: string
@@ -1309,7 +1307,7 @@ export interface IRPCGetTransactionReceiptBase {
 }
 ```
 
-> Example
+> 实例
 
 ```js
 {
@@ -1339,16 +1337,16 @@ export interface IRPCGetTransactionReceiptBase {
 
 ```ts
 /**
- * A decoded Solidity event log
+ * 一个解码的 Solidity 事件日志
  */
 export interface IDecodedSolidityEvent {
   /**
-   * The event's name
+   * 事件名称
    */
   type: string
 
   /**
-   * Event parameters as a key-value map
+   * 键值映射作为事件日志参数
    */
   [key: string]: any
 }
@@ -1365,11 +1363,11 @@ export interface IDecodedSolidityEvent {
 }
 ```
 
-A decoded Solidity event log. The event parameters are stored a key-value map.
+解码的 Solidity 事件日志。 事件参数存储在键值映射中。
 
 ## IRPCGetTransactionReceiptBase
 
-Receipt for a transaction accepted by the network. It is returned by the `gettransactionreceipt` RPC call.
+网络接受的交易收据。它由 `gettransactionreceipt` RPC 调用返回。
 
 ```ts
 export interface IRPCGetTransactionReceiptBase {
@@ -1391,26 +1389,26 @@ export interface IRPCGetTransactionReceiptBase {
 
 ## IContractsRepoData
 
-Information about contracts
+合约相关信息
 
 ```ts
 export interface IContractsRepoData {
   /**
-   * Information about deployed contracts
+   * 部署合约的相关信息
    */
   contracts: {
     [key: string]: IContractInfo,
   },
 
   /**
-   * Information about deployed libraries
+   * 部署库的相关信息
    */
   libraries: {
     [key: string]: IContractInfo,
   }
 
   /**
-   * Information of contracts referenced by deployed contract/libraries, but not deployed
+   * 部署合约/库引用的合约信息，但未部署
    */
   related: {
     [key: string]: {
@@ -1420,22 +1418,21 @@ export interface IContractsRepoData {
 }
 
 /**
- * The minimal deployment information necessary to interact with a
- * deployed contract.
+ * 与部署合约进行交互所需的最少部署信息。
  */
 export interface IContractInfo {
   /**
-   * Contract's ABI definitions, produced by solc.
+   * 合约的 ABI 定义, solc 生成.
    */
   abi: IABIMethod[]
 
   /**
-   * Contract's address
+   * 合约地址
    */
   address: string
 
   /**
-   * The owner address of the contract
+   * 合约所有者的地址
    */
   sender?: string
 }
@@ -1451,6 +1448,6 @@ export interface IABIMethod {
 }
 ```
 
-This can be generated automatically using the [solar](https://github.com/qtumproject/solar) deployment tool.
+可以使用开发工具 [solar](https://github.com/qtumproject/solar) 自动生成。
 
-An example [solar.json](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example).
+样例 [solar.json](https://github.com/qtumproject/qtumbook-mytoken-qtumjs-cli/blob/29fab6dfcca55013c7efa8ee5e91bbc8c40ca55a/solar.development.json.example).
